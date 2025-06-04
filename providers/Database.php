@@ -9,7 +9,7 @@ class Database extends PDO
     private string $charset = 'utf8';
     private string $user = 'Maicol';
     private string $password = 'T4$e7rV8!';
-    private string $sslCertPath = '../ssl/BaltimoreCyberTrustRoot.crt.pem';
+    private string $sslCertPath = __DIR__ . '../certs/BaltimoreCyberTrustRoot.crt.pem';
 
     public function __construct()
     {

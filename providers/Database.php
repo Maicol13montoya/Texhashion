@@ -1,34 +1,71 @@
 <?php
+// class Database extends PDO
+// {
+//     // ⚙️ Configuración de conexión
+//     private string $driver = 'mysql';
+//     private string $host = 'texfashio-database.mysql.database.azure.com';
+//     private string $dbName = 'texfashion'; // Tu base de datos
+//     private string $charset = 'utf8';
+//     private string $user = 'Maicol'; 
+//     private string $password = 'T4$e7rV8!'; 
+//     private string $sslCertPath = __DIR__ . '/certs/BaltimoreCyberTrustRoot.crt.pem';
+
+//     public function __construct()
+//     {
+//         $options = [
+//             PDO::MYSQL_ATTR_SSL_CA => $this->sslCertPath,
+//             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+//         ];
+
+//         try {
+//             parent::__construct(
+//                 "{$this->driver}:host={$this->host};dbname={$this->dbName};charset={$this->charset}",
+//                 $this->user,
+//                 $this->password,
+//                 $options
+//             );
+//         } catch (PDOException $e) {
+//             echo "Conexión fallida: " . $e->getMessage();
+//             exit;
+//         }
+//     }
+
 class Database extends PDO
 {
     // ⚙️ Configuración de conexión
     private string $driver = 'mysql';
     private string $host = 'texfashio-database.mysql.database.azure.com';
-    private string $dbName = 'texfashion'; // Tu base de datos
+    private string $dbName = 'texfashion';
     private string $charset = 'utf8';
-    private string $user = 'Maicol'; 
-    private string $password = 'T4$e7rV8!'; 
+    private string $user = 'Maicol';
+    private string $password = 'T4$e7rV8!';
     private string $sslCertPath = __DIR__ . '/certs/BaltimoreCyberTrustRoot.crt.pem';
 
     public function __construct()
     {
+        $dsn = "{$this->driver}:host={$this->host};dbname={$this->dbName};charset={$this->charset}";
         $options = [
-            PDO::MYSQL_ATTR_SSL_CA => $this->sslCertPath,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ];
 
+        // ✅ Verificar si el certificado existe antes de usarlo
+        if (file_exists($this->sslCertPath)) {
+            $options[PDO::MYSQL_ATTR_SSL_CA] = $this->sslCertPath;
+        } else {
+            // ⚠️ Advertencia si no existe (no detener, por si es entorno de desarrollo)
+            error_log("⚠️ Certificado SSL no encontrado en: {$this->sslCertPath}. Se intentará conectar sin SSL.");
+        }
+
         try {
-            parent::__construct(
-                "{$this->driver}:host={$this->host};dbname={$this->dbName};charset={$this->charset}",
-                $this->user,
-                $this->password,
-                $options
-            );
+            parent::__construct($dsn, $this->user, $this->password, $options);
+            // Mensaje opcional de éxito
+            // echo "✅ Conexión exitosa a la base de datos.";
         } catch (PDOException $e) {
-            echo "Conexión fallida: " . $e->getMessage();
+            echo "❌ Conexión fallida: " . $e->getMessage();
             exit;
         }
     }
+
 
     public function select(string $strSql, array $arrayData = [], int $fetchMode = PDO::FETCH_OBJ): array
     {

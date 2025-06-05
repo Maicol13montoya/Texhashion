@@ -2,19 +2,19 @@
 
 class Database extends PDO
 {
+    private string $driver = 'mysql';
+    private string $host = 'texfashio-database.mysql.database.azure.com';
+    private string $dbName = 'texfashion';
+    private string $charset = 'utf8mb4';
+    private string $user = 'Maicol';
+    private string $password;
+
     public function __construct()
     {
-        // Configuración de conexión (usa variables locales para evitar sobrescribir propiedades)
-        $driver = 'mysql';
-        $host = 'texfashio-database.mysql.database.azure.com';
-        $dbName = 'texfashion';
-        $charset = 'utf8mb4';
-        $user = 'Maicol';
-        $password = $_ENV['DB_PASSWORD'] ?? 'T4$e7rV8!';
+        // Obtener contraseña desde variable de entorno o valor por defecto
+        $this->password = $_ENV['DB_PASSWORD'] ?? 'T4$e7rV8!';
+        $dsn = "{$this->driver}:host={$this->host};dbname={$this->dbName};charset={$this->charset}";
 
-        $dsn = "$driver:host=$host;dbname=$dbName;charset=$charset";
-
-        // Opciones con SSL opcional (si constante definida)
         $sslOptions = defined('PDO::MYSQL_ATTR_SSL_CA') ? [
             PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
             PDO::MYSQL_ATTR_SSL_CA => null
@@ -29,14 +29,19 @@ class Database extends PDO
         ], $sslOptions);
 
         try {
-            parent::__construct($dsn, $user, $password, $options);
+            parent::__construct($dsn, $this->user, $this->password, $options);
+            error_log("✅ Conexión exitosa con SSL.");
         } catch (PDOException $e) {
-            error_log("⚠️ Error con SSL: " . $e->getMessage());
-            $this->connectWithoutSSL($dsn, $user, $password);
+            error_log("⚠️ Falló conexión con SSL: " . $e->getMessage());
+            try {
+                $this->connectWithoutSSL($dsn);
+            } catch (PDOException $e2) {
+                die("❌ No se pudo conectar a la base de datos: " . $e2->getMessage());
+            }
         }
     }
 
-    private function connectWithoutSSL(string $dsn, string $user, string $password): void
+    private function connectWithoutSSL(string $dsn): void
     {
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -46,27 +51,25 @@ class Database extends PDO
         ];
 
         try {
-            parent::__construct($dsn, $user, $password, $options);
+            parent::__construct($dsn, $this->user, $this->password, $options);
             error_log("✅ Conexión exitosa sin SSL.");
         } catch (PDOException $e) {
-            error_log("❌ Conexión fallida: " . $e->getMessage());
-            throw new Exception("No se pudo establecer conexión con la base de datos");
+            throw new PDOException("Fallo al conectar sin SSL: " . $e->getMessage());
         }
     }
 
-    public function select(string $sql, array $params = [], int $fetchMode = PDO::FETCH_ASSOC): array
+    public function select(string $strSql, array $arrayData = [], int $fetchMode = PDO::FETCH_ASSOC): array
     {
         try {
-            $stmt = $this->prepare($sql);
-            foreach ($params as $key => $value) {
-                $stmt->bindValue(":$key", $value);
+            $query = $this->prepare($strSql);
+            foreach ($arrayData as $key => $value) {
+                $query->bindValue(":$key", $value);
             }
-
-            $stmt->execute();
-            return $stmt->fetchAll($fetchMode);
+            $query->execute();
+            return $query->fetchAll($fetchMode);
         } catch (PDOException $e) {
-            error_log("Error en SELECT: " . $e->getMessage());
-            throw new Exception("Error en consulta SELECT");
+            error_log("❌ Error en SELECT: " . $e->getMessage());
+            throw new Exception("Error en consulta SELECT: " . $e->getMessage());
         }
     }
 
@@ -77,28 +80,30 @@ class Database extends PDO
                 throw new InvalidArgumentException("Tabla y datos son requeridos");
             }
 
-            $data = array_filter($data, fn($key) => !in_array($key, ['controller', 'method']), ARRAY_FILTER_USE_KEY);
+            $data = array_filter($data, function ($key) {
+                return !in_array($key, ['controller', 'method']);
+            }, ARRAY_FILTER_USE_KEY);
+
             ksort($data);
 
-            $columns = implode('`, `', array_keys($data));
-            $placeholders = ':' . implode(', :', array_keys($data));
+            $fieldNames = implode('`, `', array_keys($data));
+            $fieldValues = ':' . implode(', :', array_keys($data));
+            $sql = "INSERT INTO `$table` (`$fieldNames`) VALUES ($fieldValues)";
 
-            $sql = "INSERT INTO `$table` (`$columns`) VALUES ($placeholders)";
             $stmt = $this->prepare($sql);
-
             foreach ($data as $key => $value) {
                 $stmt->bindValue(":$key", $value);
             }
 
             $stmt->execute();
-            return (int) $this->lastInsertId();
+            return (int)$this->lastInsertId();
         } catch (PDOException $e) {
-            error_log("Error en INSERT: " . $e->getMessage());
-            throw new Exception("Error en INSERT");
+            error_log("❌ Error en INSERT: " . $e->getMessage());
+            throw new Exception("Error en INSERT: " . $e->getMessage());
         }
     }
 
-    public function update(string $table, array $data, string $where, array $params = []): bool
+    public function update(string $table, array $data, string $where): bool
     {
         try {
             if (empty($table) || empty($data) || empty($where)) {
@@ -106,27 +111,26 @@ class Database extends PDO
             }
 
             ksort($data);
-            $set = implode(', ', array_map(fn($key) => "`$key` = :$key", array_keys($data)));
-
-            $sql = "UPDATE `$table` SET $set WHERE $where";
-            $stmt = $this->prepare($sql);
-
+            $fieldDetails = '';
             foreach ($data as $key => $value) {
-                $stmt->bindValue(":$key", $value);
+                $fieldDetails .= "`$key` = :$key,";
             }
+            $fieldDetails = rtrim($fieldDetails, ',');
 
-            foreach ($params as $key => $value) {
+            $sql = "UPDATE `$table` SET $fieldDetails WHERE $where";
+            $stmt = $this->prepare($sql);
+            foreach ($data as $key => $value) {
                 $stmt->bindValue(":$key", $value);
             }
 
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Error en UPDATE: " . $e->getMessage());
-            throw new Exception("Error en UPDATE");
+            error_log("❌ Error en UPDATE: " . $e->getMessage());
+            throw new Exception("Error en UPDATE: " . $e->getMessage());
         }
     }
 
-    public function delete(string $table, string $where, array $params = []): int
+    public function delete(string $table, string $where): int
     {
         try {
             if (empty($table) || empty($where)) {
@@ -134,17 +138,10 @@ class Database extends PDO
             }
 
             $sql = "DELETE FROM `$table` WHERE $where";
-            $stmt = $this->prepare($sql);
-
-            foreach ($params as $key => $value) {
-                $stmt->bindValue(":$key", $value);
-            }
-
-            $stmt->execute();
-            return $stmt->rowCount();
+            return $this->exec($sql);
         } catch (PDOException $e) {
-            error_log("Error en DELETE: " . $e->getMessage());
-            throw new Exception("Error en DELETE");
+            error_log("❌ Error en DELETE: " . $e->getMessage());
+            throw new Exception("Error en DELETE: " . $e->getMessage());
         }
     }
 
@@ -156,7 +153,7 @@ class Database extends PDO
             $this->commit();
             return $result;
         } catch (Exception $e) {
-            $this->rollBack();
+            $this->rollback();
             throw $e;
         }
     }
@@ -166,7 +163,7 @@ class Database extends PDO
         try {
             $this->query('SELECT 1');
             return true;
-        } catch (PDOException) {
+        } catch (PDOException $e) {
             return false;
         }
     }

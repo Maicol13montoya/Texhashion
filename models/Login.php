@@ -45,7 +45,6 @@ class Login
 
                 // Comparar la contraseña
                 if ($storedPassword === $hashedPassword) {
-                    echo "Autenticacion exitosa";
                     return $query[0]; // Autenticación exitosa
                 } else {
                     return 'Error al Iniciar Sesión. Verifique sus Credenciales'; // Contraseña incorrecta

@@ -170,13 +170,13 @@ class Database extends PDO
 }
 
 // --- PRUEBA DE CONEXIÓN ---
-try {
-    $db = new Database();
-    if ($db->isConnected()) {
-        echo "✅ Conexión exitosa a la base de datos.";
-    } else {
-        echo "❌ Conexión fallida.";
-    }
-} catch (Exception $e) {
-    echo "❌ Error: " . $e->getMessage();
-}
+// try {
+//     $db = new Database();
+//     if ($db->isConnected()) {
+//         echo "✅ Conexión exitosa a la base de datos.";
+//     } else {
+//         echo "❌ Conexión fallida.";
+//     }
+// } catch (Exception $e) {
+//     echo "❌ Error: " . $e->getMessage();
+// }

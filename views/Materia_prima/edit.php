@@ -18,7 +18,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Fecha Ingreso</label>
+                <label class="form-label">Fecha ENTRADA</label>
                 <input type="date" class="form-control" name="Fecha_Ingreso" value="<?php echo $data[0]->Fecha_Ingreso ?>" required>
             </div>
 

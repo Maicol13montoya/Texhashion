@@ -22,31 +22,39 @@ class Login
     public function validateUser($data)
     {
         try {
+            // Limpiar espacios en blanco
+            $email = trim($data['email']);
+            $password = trim($data['password']);
+
             // Encriptar la contraseña ingresada con MD5
-            $hashedPassword = md5($data['password']); // Asegúrate de que el campo del formulario sea 'password'
+            $hashedPassword = md5($password);
 
-            //consulta para validar si el usuario existe o no
-            $strSql = "SELECT id, correo_electronico, contrasena AS encrypted_password, rol FROM usuario WHERE correo_electronico = '{$data['email']}'";
+            // Consulta SQL
+            $strSql = "SELECT id, correo_electronico, TRIM(contrasena) AS encrypted_password, rol 
+                   FROM usuario 
+                   WHERE correo_electronico = '{$email}'";
 
-            //se ejecuta la consulta   se pasa como parametro la consulta
+            // Ejecutar la consulta
             $query = $this->pdo->select($strSql);
 
-            //validacion
-            //si existe el id 
-            if (isset($query[0]->id)) {
-                // Validar si la contraseña coincide
-                if ($query[0]->encrypted_password === $hashedPassword) {
-                    //si lo encuentra me retorna un verdadero
-                    return $query[0];
+            // Verifica si el usuario existe
+            if (isset($query[0])) {
+
+                // Contraseña almacenada en la base
+                $storedPassword = trim($query[0]['encrypted_password']);
+
+                // Comparar la contraseña
+                if ($storedPassword === $hashedPassword) {
+                    echo "Autenticacion exitosa";
+                    return $query[0]; // Autenticación exitosa
                 } else {
-                    return 'Error al Iniciar Sesión. Verifique sus Credenciales';
+                    return 'Error al Iniciar Sesión. Verifique sus Credenciales'; // Contraseña incorrecta
                 }
             } else {
-                return 'Error al Iniciar Sesión. usuario no existe';
-            } //si es falso reorna error
-
+                return 'Error al Iniciar Sesión. Usuario no existe'; // No se encontró el correo
+            }
         } catch (PDOException $e) {
-            return $e->getMessage();
+            return 'Error en la base de datos: ' . $e->getMessage();
         }
     }
 }

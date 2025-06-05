@@ -36,18 +36,17 @@ class LoginController
         //validateUser metodo creado en el modelo del modelo llegan aqui
         $validateUser = $this->model->validateUser($_POST);
         //si el validateuser es verdadera se dirije al home
-        if (is_object($validateUser)) {
+        // var_dump($validateUser);
+        if (is_array($validateUser) && isset($validateUser['id']) && $validateUser['id'] > 0) {
             $_SESSION['user'] = $_POST['email'];
-            $_SESSION['user_role'] = $validateUser->rol;
+            $_SESSION['user_role'] = $validateUser['rol'];
             header('Location: ?controller=home');
             exit();
-        } else { //si ed falso se devuelve un error
+        } else {
             $error = [
                 'errorMessage' => $validateUser,
-                //el email que este escrito en post con el fin de poder ponerlo en la vista
                 'email' => $_POST['email']
             ];
-            //se requiere la vista del login en caso de que validateuser es false
             require 'views/login.php';
         }
     }

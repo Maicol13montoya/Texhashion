@@ -38,19 +38,19 @@ class MateriaPriemaController
             $arrEstado = [];
             $arrUniMed = [];
             foreach ($MateriaPriemaController as $MateriaPrima) {
-                $categorias = $this->model->getCategorias($MateriaPrima->idProducto);
+                $categorias = $this->model->getCategorias($MateriaPrima['idProducto']);
                 array_push($arrCategoria, $categorias);
             }
             foreach ($MateriaPriemaController as $MateriaPrima) {
-                $estados = $this->model->getEstados($MateriaPrima->idProducto);
+                $estados = $this->model->getEstados($MateriaPrima['idProducto']);
                 array_push($arrEstado, $estados);
             }
             foreach ($MateriaPriemaController as $MateriaPrima) {
-                $unidad_medidas = $this->model->getUnidadMedida($MateriaPrima->idProducto);
+                $unidad_medidas = $this->model->getUnidadMedida($MateriaPrima['idProducto']);
                 array_push($arrUniMed, $unidad_medidas);
             }
             foreach ($MateriaPriemaController as $MateriaPrima) {
-                $usuarios = $this->model->getProveedores($MateriaPrima->idProducto);
+                $usuarios = $this->model->getProveedores($MateriaPrima['idProducto']);
                 array_push($arrUniMed, $usuarios);
             }
             ob_start();

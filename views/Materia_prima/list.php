@@ -26,27 +26,28 @@
                     </tr>
                 </thead>
                 <tbody>
+                    
                     <?php foreach ($MateriaPriemaController as $MateriaPrima) : ?>
                         <tr>
-                            <td><?php echo $MateriaPrima->idProducto ?></td>
-                            <td><?php echo $MateriaPrima->Nombre ?></td>
-                            <td><?php echo $MateriaPrima->Descripcion ?></td>
-                            <td><?php echo $MateriaPrima->Fecha_Ingreso ?></td>
-                            <td><?php echo $MateriaPrima->Precio_Unidad ?></td>
-                            <td><?php echo $MateriaPrima->Cantidad_Stock ?></td>
-                            <td><?php echo $MateriaPrima->ProveedorNombre . ' ' . $MateriaPrima->ProveedorApellido ?></td>
-                            <td><?php echo $MateriaPrima->CategoriaNombre ?></td>
-                            <td><?php echo $MateriaPrima->UnidadMedidaNombre ?></td>
-                            <td><?php echo $MateriaPrima->Fecha_Actualizacion ?></td>
-                            <td><?php echo $MateriaPrima->EstadoNombre ?></td>
+                            <td><?php echo $MateriaPrima['idProducto'] ?></td>
+                            <td><?php echo $MateriaPrima['Nombre'] ?></td>
+                            <td><?php echo $MateriaPrima['Descripcion'] ?></td>
+                            <td><?php echo $MateriaPrima['Fecha_Ingreso'] ?></td>
+                            <td><?php echo $MateriaPrima['Precio_Unidad'] ?></td>
+                            <td><?php echo $MateriaPrima['Cantidad_Stock'] ?></td>
+                            <td><?php echo $MateriaPrima['ProveedorNombre']. ' ' . $MateriaPrima['ProveedorApellido'] ?></td>
+                            <td><?php echo $MateriaPrima['CategoriaNombre'] ?></td>
+                            <td><?php echo $MateriaPrima['UnidadMedidaNombre'] ?></td>
+                            <td><?php echo $MateriaPrima['Fecha_Actualizacion'] ?></td>
+                            <td><?php echo $MateriaPrima['EstadoNombre'] ?></td>
                             <td>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <a href="?controller=MateriaPriema&method=edit&idProducto=<?php echo $MateriaPrima->idProducto ?>" class="btn btn-primary">
+                                    <a href="?controller=MateriaPriema&method=edit&idProducto=<?php echo $MateriaPrima['idProducto'] ?>" class="btn btn-primary">
                                         <i class="fas fa-edit"></i> <!-- Icono de editar -->
                                     </a>
-                                    <a href="?controller=MateriaPriema&method=deleteOut&idProducto=<?php echo $MateriaPrima->idProducto ?>"
+                                    <a href="?controller=MateriaPriema&method=deleteOut&idProducto=<?php echo $MateriaPrima['idProducto'] ?>"
                                         class="btn btn-danger"
-                                        onclick="return confirm('¿Estás seguro de que deseas eliminar el producto con ID <?php echo $MateriaPrima->idProducto ?>?');">
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar el producto con ID <?php echo $MateriaPrima['idProducto'] ?>?');">
                                         <i class="fas fa-trash-alt"></i> <!-- Icono de eliminar -->
                                     </a>
                                 </div>

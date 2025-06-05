@@ -3,16 +3,16 @@
 class Database extends PDO
 {
     private string $driver = 'mysql';
-    private string $host = 'texfashio-database.mysql.database.azure.com';
-    private string $dbName = 'texfashion';
+    private string $host = 'texfashio.mysql.database.azure.com';
+    private string $dbName = 'textfashion';
     private string $charset = 'utf8mb4';
-    private string $user = 'Maicol';
+    private string $user = 'maicol';
     private string $password;
 
     public function __construct()
     {
         // Obtener contraseña desde variable de entorno o valor por defecto
-        $this->password = $_ENV['DB_PASSWORD'] ?? 'T4$e7rV8!';
+        $this->password = $_ENV['DB_PASSWORD'] ?? 'root*25*';
         $dsn = "{$this->driver}:host={$this->host};dbname={$this->dbName};charset={$this->charset}";
 
         $sslOptions = defined('PDO::MYSQL_ATTR_SSL_CA') ? [
@@ -167,4 +167,16 @@ class Database extends PDO
             return false;
         }
     }
+}
+
+// --- PRUEBA DE CONEXIÓN ---
+try {
+    $db = new Database();
+    if ($db->isConnected()) {
+        echo "✅ Conexión exitosa a la base de datos.";
+    } else {
+        echo "❌ Conexión fallida.";
+    }
+} catch (Exception $e) {
+    echo "❌ Error: " . $e->getMessage();
 }

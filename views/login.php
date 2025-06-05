@@ -122,7 +122,7 @@
             transition: transform 0.3s ease, background-color 0.3s ease;
         }
 
-       
+
 
         .home-icon:hover {
             transform: scale(1.1);
@@ -155,7 +155,10 @@
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <p class="text-dark"><?php echo $error['errorMessage']; ?></p>
+                            <p class="text-dark">
+                                <?php echo implode('<br>', $error['errorMessage']); ?>
+                            </p>
+
                         </div>
                     <?php } ?>
 
@@ -190,4 +193,3 @@
 </body>
 
 </html>
-

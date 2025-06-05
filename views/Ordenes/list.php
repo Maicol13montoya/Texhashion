@@ -70,8 +70,7 @@
                                     <a href="?controller=Ordenes&method=edit&idOrden=<?php echo $orden->idOrden ?>" class="btn btn-primary">
                                         <i class="fas fa-edit"></i> <!-- Icono de editar -->
                                     </a>
-                                    <a href="?controller=Ordenes&method=delete&idOrden=<?php echo $orden->idOrden ?>"
-                                        class="btn btn-danger"
+                                  <a href="?controller=Ordenes&method=delete&idOrden=<?php echo $orden->idOrden ?>" class="btn btn-danger">
                                         onclick="return confirm('¿Estás seguro de que deseas eliminar la orden #<?php echo $orden->idOrden ?>?');">
                                         <i class="fas fa-trash-alt"></i> <!-- Icono de eliminar -->
                                     </a>

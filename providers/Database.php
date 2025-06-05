@@ -8,7 +8,7 @@ class Database extends PDO
     private string $dbName = 'texfashion';
     private string $charset = 'utf8mb4'; // Cambiado a utf8mb4 para mejor soporte Unicode
     private string $user = 'Maicol';
-    private string $password; // Mejor práctica: obtener de variable de entorno
+    private string $password = 'T4$e7rV8!'; // Mejor práctica: obtener de variable de entorno
     
     public function __construct()
     {

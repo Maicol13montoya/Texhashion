@@ -3,7 +3,7 @@
 class Database extends PDO
 {
     private string $driver = 'mysql';
-    private string $host = 'texfashio-database.mysql.database.azure.com';
+    private string $host = 'texfashio.mysql.database.azure.com';
     private string $dbName = 'textfashion';
     private string $charset = 'utf8mb4';
     private string $user = 'maicol';

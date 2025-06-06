@@ -7,22 +7,21 @@ class Database extends PDO
     private string $dbName = 'textfashion';
     private string $charset = 'utf8mb4';
     private string $user = 'maicol';
-    private string $password;
+    private string $password = 'root*25*'; // << Aquí está la contraseña directamente
 
     public function __construct()
     {
-        // Obtener contraseña desde variable de entorno o valor por defecto
-        $this->password = $_ENV['DB_PASSWORD'] ?? 'root*25*';
         $dsn = "{$this->driver}:host={$this->host};dbname={$this->dbName};charset={$this->charset}";
 
-        $sslOptions = defined('PDO::MYSQL_ATTR_SSL_CA') ? [
+        $sslOptions = [
             PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
-            PDO::MYSQL_ATTR_SSL_CA => null
-        ] : [];
+            PDO::MYSQL_ATTR_SSL_CA => null,
+            PDO::MYSQL_ATTR_SSL_CIPHER => null
+        ];
 
-        $options = array_replace([
+        $options = array_merge([
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO::ATTR_TIMEOUT => 30,
             PDO::ATTR_PERSISTENT => false
@@ -30,14 +29,10 @@ class Database extends PDO
 
         try {
             parent::__construct($dsn, $this->user, $this->password, $options);
-            error_log("✅ Conexión exitosa con SSL.");
+            error_log("✅ Conexión exitosa con SSL a Azure MySQL");
         } catch (PDOException $e) {
             error_log("⚠️ Falló conexión con SSL: " . $e->getMessage());
-            try {
-                $this->connectWithoutSSL($dsn);
-            } catch (PDOException $e2) {
-                die("❌ No se pudo conectar a la base de datos: " . $e2->getMessage());
-            }
+            $this->connectWithoutSSL($dsn);
         }
     }
 
@@ -45,20 +40,16 @@ class Database extends PDO
     {
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO::ATTR_TIMEOUT => 30
         ];
 
-        try {
-            parent::__construct($dsn, $this->user, $this->password, $options);
-            error_log("✅ Conexión exitosa sin SSL.");
-        } catch (PDOException $e) {
-            throw new PDOException("Fallo al conectar sin SSL: " . $e->getMessage());
-        }
+        parent::__construct($dsn, $this->user, $this->password, $options);
+        error_log("✅ Conexión exitosa sin SSL a Azure MySQL");
     }
 
-    public function select(string $strSql, array $arrayData = [], int $fetchMode = PDO::FETCH_ASSOC): array
+    public function select(string $strSql, array $arrayData = [], int $fetchMode = PDO::FETCH_OBJ): array
     {
         try {
             $query = $this->prepare($strSql);
@@ -76,14 +67,7 @@ class Database extends PDO
     public function insert(string $table, array $data): int
     {
         try {
-            if (empty($table) || empty($data)) {
-                throw new InvalidArgumentException("Tabla y datos son requeridos");
-            }
-
-            $data = array_filter($data, function ($key) {
-                return !in_array($key, ['controller', 'method']);
-            }, ARRAY_FILTER_USE_KEY);
-
+            $data = array_filter($data, fn($k) => !in_array($k, ['controller', 'method']), ARRAY_FILTER_USE_KEY);
             ksort($data);
 
             $fieldNames = implode('`, `', array_keys($data));
@@ -98,7 +82,6 @@ class Database extends PDO
             $stmt->execute();
             return (int)$this->lastInsertId();
         } catch (PDOException $e) {
-            error_log("❌ Error en INSERT: " . $e->getMessage());
             throw new Exception("Error en INSERT: " . $e->getMessage());
         }
     }
@@ -106,16 +89,8 @@ class Database extends PDO
     public function update(string $table, array $data, string $where): bool
     {
         try {
-            if (empty($table) || empty($data) || empty($where)) {
-                throw new InvalidArgumentException("Tabla, datos y condición WHERE son requeridos");
-            }
-
             ksort($data);
-            $fieldDetails = '';
-            foreach ($data as $key => $value) {
-                $fieldDetails .= "`$key` = :$key,";
-            }
-            $fieldDetails = rtrim($fieldDetails, ',');
+            $fieldDetails = implode(', ', array_map(fn($k) => "`$k` = :$k", array_keys($data)));
 
             $sql = "UPDATE `$table` SET $fieldDetails WHERE $where";
             $stmt = $this->prepare($sql);
@@ -125,7 +100,6 @@ class Database extends PDO
 
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("❌ Error en UPDATE: " . $e->getMessage());
             throw new Exception("Error en UPDATE: " . $e->getMessage());
         }
     }
@@ -133,14 +107,9 @@ class Database extends PDO
     public function delete(string $table, string $where): int
     {
         try {
-            if (empty($table) || empty($where)) {
-                throw new InvalidArgumentException("Tabla y condición WHERE son requeridos");
-            }
-
             $sql = "DELETE FROM `$table` WHERE $where";
             return $this->exec($sql);
         } catch (PDOException $e) {
-            error_log("❌ Error en DELETE: " . $e->getMessage());
             throw new Exception("Error en DELETE: " . $e->getMessage());
         }
     }
@@ -167,16 +136,33 @@ class Database extends PDO
             return false;
         }
     }
+
+    public function testUsuariosQuery(): array
+    {
+        $sql = "SELECT u.*, r.Rol, d.TipoDocumento 
+                FROM usuario u 
+                JOIN rol r ON u.rol = r.idRol 
+                JOIN documento d ON u.tipo_documento = d.IdDocumento
+                LIMIT 5";
+        return $this->select($sql);
+    }
 }
 
-// --- PRUEBA DE CONEXIÓN ---
-// try {
-//     $db = new Database();
-//     if ($db->isConnected()) {
-//         echo "✅ Conexión exitosa a la base de datos.";
-//     } else {
-//         echo "❌ Conexión fallida.";
-//     }
-// } catch (Exception $e) {
-//     echo "❌ Error: " . $e->getMessage();
-// }
+// PRUEBA
+try {
+    $db = new Database();
+    if ($db->isConnected()) {
+        echo "✅ Conexión exitosa a Azure MySQL<br>";
+
+        $usuarios = $db->testUsuariosQuery();
+        echo "👥 Usuarios encontrados: " . count($usuarios) . "<br>";
+
+        if (!empty($usuarios)) {
+            echo "📋 Primer usuario: <pre>" . print_r($usuarios[0], true) . "</pre>";
+        }
+    } else {
+        echo "❌ Conexión fallida a Azure MySQL";
+    }
+} catch (Exception $e) {
+    echo "❌ Error: " . $e->getMessage();
+}

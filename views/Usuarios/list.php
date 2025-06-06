@@ -1,3 +1,5 @@
+<?php
+?>
 <main class="container">
     <section class="col-md-12 text-left">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -8,6 +10,14 @@
         </div>
 
         <section class="col-md-12 table-responsive">
+
+            <?php
+            // Depuración: muestra el contenido de $UsuariosController
+            echo '<pre>';
+            var_dump($UsuariosController);
+            echo '</pre>';
+            ?>
+
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>

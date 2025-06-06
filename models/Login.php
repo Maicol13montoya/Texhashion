@@ -3,7 +3,7 @@
 /**
  * modelo de Login
  */
-class Login
+class LogiN
 {
     //variable pdo
     private $pdo;

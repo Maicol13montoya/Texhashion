@@ -1,5 +1,4 @@
 <?php
-
 ?>
 <main class="container">
     <section class="col-md-12 text-left">

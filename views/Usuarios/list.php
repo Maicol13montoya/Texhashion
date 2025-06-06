@@ -1,5 +1,6 @@
 <?php
 ?>
+
 <main class="container">
     <section class="col-md-12 text-left">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -10,19 +11,11 @@
         </div>
 
         <section class="col-md-12 table-responsive">
-
-            <?php
-            // Depuración: muestra el contenido de $UsuariosController
-            echo '<pre>';
-            var_dump($UsuariosController);
-            echo '</pre>';
-            ?>
-
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nombre y Apellido</th>
+                        <th>Nombre y Apellido</th
                         <th>Documento</th>
                         <th>Correo</th>
                         <th>Rol</th>
@@ -56,7 +49,6 @@
         </section>
     </section>
 </main>
-
 <style>
     body {
         background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 0%, rgba(0, 100, 148, 1) 100%);

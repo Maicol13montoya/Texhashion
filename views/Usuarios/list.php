@@ -1,4 +1,5 @@
 <?php
+
 ?>
 <main class="container">
     <section class="col-md-12 text-left">
@@ -32,17 +33,17 @@
                 <tbody>
                     <?php foreach ($UsuariosController as $Usuarios) : ?>
                         <tr>
-                            <td><?php echo $Usuarios->id ?></td>
-                            <td><?php echo $Usuarios->nombre . ' ' . $Usuarios->apellido ?></td>
-                            <td><?php echo $Usuarios->documento ?></td>
-                            <td><?php echo $Usuarios->correo_electronico ?></td>
-                            <td><?php echo $Usuarios->Rol ?></td>
+                            <td><?php echo $Usuarios['id'] ?></td>
+                            <td><?php echo $Usuarios['nombre'] . ' ' . $Usuarios['apellido'] ?></td>
+                            <td><?php echo $Usuarios['documento'] ?></td>
+                            <td><?php echo $Usuarios['correo_electronico'] ?></td>
+                            <td><?php echo $Usuarios['Rol'] ?></td>
                             <td>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <a href="?controller=Usuarios&method=edit&id=<?php echo $Usuarios->id ?>" class="btn btn-primary">
+                                    <a href="?controller=Usuarios&method=edit&id=<?php echo $Usuarios['id'] ?>" class="btn btn-primary">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="?controller=Usuarios&method=delete&id=<?php echo $Usuarios->id ?>"
+                                    <a href="?controller=Usuarios&method=delete&id=<?php echo $Usuarios['id'] ?>"
                                         class="btn btn-danger"
                                         onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                         <i class="fas fa-trash-alt"></i>

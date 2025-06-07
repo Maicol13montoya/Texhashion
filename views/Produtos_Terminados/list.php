@@ -1,10 +1,6 @@
 <?php
-
-// Depuración: muestra el contenido de la variable
-echo '<pre>';
-var_dump($productosTerminados);
-echo '</pre>';
 ?>
+
 <main class="container">
     <section class="col-md-12 text-left">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -32,21 +28,21 @@ echo '</pre>';
                 <tbody>
                     <?php foreach ($productosTerminados as $producto): ?>
                         <tr>
-                            <td><?php echo $producto->idProductos ?></td>
-                            <td><?php echo $producto->Nombre_Producto ?></td>
-                            <td><?php echo $producto->Cantidad_Disponible ?></td>
-                            <td><?php echo $producto->DescripcionPT ?></td>
-                            <td><?php echo $producto->Fecha_Entrada ?></td>
-                            <td><?php echo $producto->Fecha_Salida ?></td>
-                            <td><?php echo $producto->Nombre ?></td>
-                            <td><?php echo $producto->Estados ?></td>
+                            <td><?php echo $producto['idProductos'] ?></td>
+                            <td><?php echo $producto['Nombre_Producto'] ?></td>
+                            <td><?php echo $producto['Cantidad_Disponible'] ?></td>
+                            <td><?php echo $producto['Descripcion'] ?></td>
+                            <td><?php echo $producto['Fecha_Entrada'] ?></td>
+                            <td><?php echo $producto['Fecha_Salida'] ?></td>
+                            <td><?php echo $producto['Nombre'] ?></td>
+                            <td><?php echo $producto['Estados'] ?></td>
                             <td>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <a href="?controller=ProductosTerminados&method=edit&idProductos=<?php echo $producto->idProductos ?>"
+                                    <a href="?controller=ProductosTerminados&method=edit&idProductos=<?php echo $producto['idProductos'] ?>"
                                         class="btn btn-primary">
                                         <i class="fas fa-edit"></i> <!-- Icono de editar -->
                                     </a>
-                                    <a href="?controller=ProductosTerminados&method=deleteOut&idProductos=<?php echo $producto->idProductos ?>"
+                                    <a href="?controller=ProductosTerminados&method=deleteOut&idProductos=<?php echo $producto['idProductos'] ?>"
                                         class="btn btn-danger"
                                         onclick="return confirm('¿Estás seguro de que deseas eliminar este producto terminado?');">
                                         <i class="fas fa-trash-alt"></i> <!-- Icono de eliminar -->

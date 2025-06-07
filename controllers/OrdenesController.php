@@ -1,4 +1,5 @@
 <?php
+
 require 'models/Ordenes.php';
 require 'models/Usuario.php';
 require 'models/Materia_prima.php';
@@ -30,13 +31,17 @@ class OrdenesController
         }
     }
 
-
     public function index()
     {
         if (isset($_SESSION['user'])) {
+            echo "<b>Entrando al método index() de OrdenesController</b><br>";
 
             // Obtener todas las órdenes
             $OrdenesController = $this->model->getAll();
+            echo "<b>Resultado de getAll():</b><br>";
+            echo '<pre>';
+            var_dump($OrdenesController);
+            echo '</pre>';
 
             // Inicializar arrays de datos
             $arrmateriasprimas = [];
@@ -52,38 +57,44 @@ class OrdenesController
 
             // Recorrer todas las órdenes para obtener los detalles y las notificaciones
             foreach ($OrdenesController as $Ordenes) {
+                echo "<b>Procesando orden ID:</b> " . (is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden) . "<br>";
+
                 // Obtener los detalles de cada orden (materias primas, estados, etc.)
-                $materiasprimas = $this->model->getMateriasPrimas($Ordenes->idOrden);
+                $materiasprimas = $this->model->getMateriasPrimas(is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden);
                 array_push($arrmateriasprimas, $materiasprimas);
 
-                $estados = $this->model->getEstados($Ordenes->idOrden);
+                $estados = $this->model->getEstados(is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden);
                 array_push($arrEstado, $estados);
 
-                $usuarios = $this->model->getRol($Ordenes->idOrden);
+                $usuarios = $this->model->getRol(is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden);
                 array_push($arrusuarios, $usuarios);
 
-                $ProductosTerminados = $this->model->getProductosTerminados($Ordenes->idOrden);
+                $ProductosTerminados = $this->model->getProductosTerminados(is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden);
                 array_push($arrProductosTerminados, $ProductosTerminados);
 
                 // Verificar si la fecha de entrega está dentro de los próximos días
-                $fechaEntrega = new DateTime($Ordenes->Fecha_Entrega);
+                $fechaEntrega = new DateTime(is_array($Ordenes) ? $Ordenes['Fecha_Entrega'] : $Ordenes->Fecha_Entrega);
                 if ($fechaEntrega <= $fechaLimite && $fechaEntrega >= $fechaActual) {
-                    // Acceder a las propiedades del objeto correctamente
-                    $estadoNombre = isset($Ordenes->EstadoNombre) ? $Ordenes->EstadoNombre : 'Estado desconocido';
-                    $clienteNombre = isset($Ordenes->ClienteNombre) ? $Ordenes->ClienteNombre : 'Cliente desconocido';
+                    $estadoNombre = is_array($Ordenes) ? ($Ordenes['EstadoNombre'] ?? 'Estado desconocido') : ($Ordenes->EstadoNombre ?? 'Estado desconocido');
+                    $clienteNombre = is_array($Ordenes) ? ($Ordenes['ClienteNombre'] ?? 'Cliente desconocido') : ($Ordenes->ClienteNombre ?? 'Cliente desconocido');
 
                     array_push($arrNotificaciones, [
-                        'idOrden' => $Ordenes->idOrden,
-                        'titulo' => 'Entrega próxima de Orden #' . $Ordenes->idOrden,
-                        'fecha' => $Ordenes->Fecha_Entrega,
-                        'mensaje' => 'La orden está por entregarse el ' . $Ordenes->Fecha_Entrega .
+                        'idOrden' => is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden,
+                        'titulo' => 'Entrega próxima de Orden #' . (is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden),
+                        'fecha' => is_array($Ordenes) ? $Ordenes['Fecha_Entrega'] : $Ordenes->Fecha_Entrega,
+                        'mensaje' => 'La orden está por entregarse el ' . (is_array($Ordenes) ? $Ordenes['Fecha_Entrega'] : $Ordenes->Fecha_Entrega) .
                             '. Cliente: ' . $clienteNombre .
                             '. Estado: ' . $estadoNombre .
-                            '. Total: $' . number_format($Ordenes->Total_Total, 2) .
-                            '. Cantidad de Productos: ' . $Ordenes->Cantidad_Producto
+                            '. Total: $' . number_format(is_array($Ordenes) ? $Ordenes['Total_Total'] : $Ordenes->Total_Total, 2) .
+                            '. Cantidad de Productos: ' . (is_array($Ordenes) ? $Ordenes['Cantidad_Producto'] : $Ordenes->Cantidad_Producto)
                     ]);
                 }
             }
+
+            echo "<b>Notificaciones generadas:</b><br>";
+            echo '<pre>';
+            var_dump($arrNotificaciones);
+            echo '</pre>';
 
             // Cargar la vista con las notificaciones
             ob_start();
@@ -94,7 +105,6 @@ class OrdenesController
             require 'views/login.php';
         }
     }
-
 
     public function add()
     {
@@ -127,13 +137,11 @@ class OrdenesController
         }
 
         // Obtener clientes, productos terminados, materias primas y estados
-
         $productosTerminados = $this->productosTerminados->getAll();
         $usuarios = $this->usuarios->getAll();
         $materiasPrimas = $this->materiasPrimas->getAll();
         $estados = $this->estados->getAll();
         $productosTerminados = $this->productosTerminados->getall();
-
 
         // Si es GET, mostrar el formulario de creación
         ob_start();

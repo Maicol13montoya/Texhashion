@@ -1,3 +1,10 @@
+<?php
+
+// Depuración: muestra el contenido de la variable
+echo '<pre>';
+var_dump($productosTerminados);
+echo '</pre>';
+?>
 <main class="container">
     <section class="col-md-12 text-left">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -44,7 +51,6 @@
                                         onclick="return confirm('¿Estás seguro de que deseas eliminar este producto terminado?');">
                                         <i class="fas fa-trash-alt"></i> <!-- Icono de eliminar -->
                                     </a>
-
                                 </div>
                             </td>
                         </tr>

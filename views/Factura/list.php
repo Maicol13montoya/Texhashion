@@ -1,3 +1,10 @@
+<?php
+
+// Depuración: muestra el contenido de la variable
+echo '<pre>';
+var_dump($FacturasController);
+echo '</pre>';
+?>
 <main class="container">
     <section class="col-md-12 text-left">
         <div style="display: flex; justify-content: space-between; align-items: center;">

@@ -1,5 +1,6 @@
 <?php
 
+
 require 'models/Ordenes.php';
 require 'models/Usuario.php';
 require 'models/Materia_prima.php';
@@ -34,71 +35,51 @@ class OrdenesController
     public function index()
     {
         if (isset($_SESSION['user'])) {
-            echo "<b>Entrando al método index() de OrdenesController</b><br>";
-
-            // Obtener todas las órdenes
             $OrdenesController = $this->model->getAll();
-            echo "<b>Resultado de getAll():</b><br>";
-            echo '<pre>';
-            var_dump($OrdenesController);
-            echo '</pre>';
 
-            // Inicializar arrays de datos
             $arrmateriasprimas = [];
             $arrEstado = [];
             $arrusuarios = [];
             $arrProductosTerminados = [];
-            $arrNotificaciones = [];  // Aquí almacenaremos las notificaciones
+            $arrNotificaciones = [];
 
-            // Obtener la fecha actual y la fecha límite para las notificaciones
             $fechaActual = new DateTime();
-            $diasAnticipacion = 3;  // Número de días antes de la entrega que queremos notificar
+            $diasAnticipacion = 3;
             $fechaLimite = (new DateTime())->modify("+$diasAnticipacion days");
 
-            // Recorrer todas las órdenes para obtener los detalles y las notificaciones
             foreach ($OrdenesController as $Ordenes) {
-                echo "<b>Procesando orden ID:</b> " . (is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden) . "<br>";
-
-                // Obtener los detalles de cada orden (materias primas, estados, etc.)
-                $materiasprimas = $this->model->getMateriasPrimas(is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden);
+                $materiasprimas = $this->model->getMateriasPrimas($Ordenes['idOrden']);
                 array_push($arrmateriasprimas, $materiasprimas);
 
-                $estados = $this->model->getEstados(is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden);
+                $estados = $this->model->getEstados($Ordenes['idOrden']);
                 array_push($arrEstado, $estados);
 
-                $usuarios = $this->model->getRol(is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden);
+                $usuarios = $this->model->getRol($Ordenes['idOrden']);
                 array_push($arrusuarios, $usuarios);
 
-                $ProductosTerminados = $this->model->getProductosTerminados(is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden);
+                $ProductosTerminados = $this->model->getProductosTerminados($Ordenes['idOrden']);
                 array_push($arrProductosTerminados, $ProductosTerminados);
 
-                // Verificar si la fecha de entrega está dentro de los próximos días
-                $fechaEntrega = new DateTime(is_array($Ordenes) ? $Ordenes['Fecha_Entrega'] : $Ordenes->Fecha_Entrega);
+                $fechaEntrega = new DateTime($Ordenes['Fecha_Entrega']);
                 if ($fechaEntrega <= $fechaLimite && $fechaEntrega >= $fechaActual) {
-                    $estadoNombre = is_array($Ordenes) ? ($Ordenes['EstadoNombre'] ?? 'Estado desconocido') : ($Ordenes->EstadoNombre ?? 'Estado desconocido');
-                    $clienteNombre = is_array($Ordenes) ? ($Ordenes['ClienteNombre'] ?? 'Cliente desconocido') : ($Ordenes->ClienteNombre ?? 'Cliente desconocido');
+                    $estadoNombre = $Ordenes['Estados'] ?? 'Estado desconocido';
+                    $clienteNombre = $Ordenes['nombre'] ?? 'Cliente desconocido';
 
                     array_push($arrNotificaciones, [
-                        'idOrden' => is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden,
-                        'titulo' => 'Entrega próxima de Orden #' . (is_array($Ordenes) ? $Ordenes['idOrden'] : $Ordenes->idOrden),
-                        'fecha' => is_array($Ordenes) ? $Ordenes['Fecha_Entrega'] : $Ordenes->Fecha_Entrega,
-                        'mensaje' => 'La orden está por entregarse el ' . (is_array($Ordenes) ? $Ordenes['Fecha_Entrega'] : $Ordenes->Fecha_Entrega) .
+                        'idOrden' => $Ordenes['idOrden'],
+                        'titulo' => 'Entrega próxima de Orden #' . $Ordenes['idOrden'],
+                        'fecha' => $Ordenes['Fecha_Entrega'],
+                        'mensaje' => 'La orden está por entregarse el ' . $Ordenes['Fecha_Entrega'] .
                             '. Cliente: ' . $clienteNombre .
                             '. Estado: ' . $estadoNombre .
-                            '. Total: $' . number_format(is_array($Ordenes) ? $Ordenes['Total_Total'] : $Ordenes->Total_Total, 2) .
-                            '. Cantidad de Productos: ' . (is_array($Ordenes) ? $Ordenes['Cantidad_Producto'] : $Ordenes->Cantidad_Producto)
+                            '. Total: $' . number_format($Ordenes['Total_Total'], 2) .
+                            '. Cantidad de Productos: ' . $Ordenes['Cantidad_Producto']
                     ]);
                 }
             }
 
-            echo "<b>Notificaciones generadas:</b><br>";
-            echo '<pre>';
-            var_dump($arrNotificaciones);
-            echo '</pre>';
-
-            // Cargar la vista con las notificaciones
             ob_start();
-            require 'views/Ordenes/list.php';  // Mostrar la vista con el calendario
+            require 'views/Ordenes/list.php';
             $content = ob_get_clean();
             require 'views/home.php';
         } else {
@@ -109,7 +90,6 @@ class OrdenesController
     public function add()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Validar y procesar los datos enviados por POST
             $idCliente = $_POST['idCliente'];
             $fechaOrden = $_POST['Fecha_Orden'];
             $totalTotal = $_POST['Total_Total'];
@@ -119,7 +99,6 @@ class OrdenesController
             $idMateriaPrima = $_POST['idMateriaPrima'];
             $estado = $_POST['Estado'];
 
-            // Llamar al modelo para agregar la nueva Ordenes
             $this->model->newOrdenes([
                 'idCliente' => $idCliente,
                 'Fecha_Orden' => $fechaOrden,
@@ -131,19 +110,16 @@ class OrdenesController
                 'Estado' => $estado
             ]);
 
-            // Redirigir después de agregar la Ordenes
             header('Location: ?controller=Ordenes&method=index');
             exit();
         }
 
-        // Obtener clientes, productos terminados, materias primas y estados
         $productosTerminados = $this->productosTerminados->getAll();
         $usuarios = $this->usuarios->getAll();
         $materiasPrimas = $this->materiasPrimas->getAll();
         $estados = $this->estados->getAll();
         $productosTerminados = $this->productosTerminados->getall();
 
-        // Si es GET, mostrar el formulario de creación
         ob_start();
         require 'views/Ordenes/new.php';
         $content = ob_get_clean();
@@ -152,7 +128,6 @@ class OrdenesController
 
     public function save()
     {
-        // Filtrar los datos que vienen del formulario
         $data = [
             'idCliente' => $_POST['idCliente'],
             'Fecha_Orden' => $_POST['Fecha_Orden'],
@@ -164,10 +139,8 @@ class OrdenesController
             'Estado' => $_POST['estado']
         ];
 
-        // Llamar al modelo para realizar la inserción
         $this->model->newOrdenes($data);
 
-        // Redirigir después de guardar
         header('Location: ?controller=Ordenes&method=index');
     }
 
@@ -195,7 +168,6 @@ class OrdenesController
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Organiza array para actualizar la Ordenes
             $dataOrden = [
                 'idOrden' => $_POST['idOrden'],
                 'idCliente' => $_POST['idCliente'],
@@ -210,27 +182,21 @@ class OrdenesController
 
             $resOrden = $this->model->editOrdenes($dataOrden);
 
-            // Redirigir después de actualizar
             header('Location: ?controller=Ordenes&method=index');
         }
     }
 
     public function delete()
     {
-        // Verifica que se ha recibido el idOrden
         if (isset($_REQUEST['idOrden'])) {
             $idOrden = $_REQUEST['idOrden'];
 
-            // Llama al método del modelo para eliminar la Ordenes
             $result = $this->model->deleteOrdenes($idOrden);
 
-            // Maneja el resultado
             if ($result === true) {
-                // Redirigir después de marcar como "OUT"
                 header('Location: ?controller=Ordenes&method=index');
                 exit();
             } else {
-                // Si hay un error, podrías manejarlo aquí
                 echo "Error al eliminar la Ordenes: " . $result;
             }
         } else {

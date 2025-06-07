@@ -1,9 +1,4 @@
 <?php
-
-// Depuración: muestra el contenido de la variable
-echo '<pre>';
-var_dump($FacturasController);
-echo '</pre>';
 ?>
 <main class="container">
     <section class="col-md-12 text-left">
@@ -35,24 +30,24 @@ echo '</pre>';
                 <tbody>
                     <?php foreach ($FacturasController as $Facturas): ?>
                         <tr>
-                            <td><?php echo $Facturas->idFacturas ?></td>
-                            <td><?php echo $Facturas->Cantidad ?></td>
-                            <td><?php echo $Facturas->Nombre_Producto ?></td>
-                            <td><?php echo $Facturas->Fecha_de_Emision ?></td>
-                            <td><?php echo $Facturas->Precio_Total ?></td>
-                            <td><?php echo $Facturas->Numero_Factura ?></td>
-                            <td><?php echo $Facturas->nombre . ' ' . $Facturas->apellido ?></td>
-                            <td><?php echo $Facturas->Direccion_Facturacion ?></td>
-                            <td><?php echo $Facturas->EstadoNombre ?></td>
-                            <td><?php echo $Facturas->Fecha_Pago ?></td>
-                            <td><?php echo $Facturas->Referencia_Pago ?></td>
+                            <td><?php echo $Facturas['idFacturas'] ?></td>
+                            <td><?php echo $Facturas['Cantidad'] ?></td>
+                            <td><?php echo $Facturas['Nombre_Producto'] ?></td>
+                            <td><?php echo $Facturas['Fecha_de_Emision'] ?></td>
+                            <td><?php echo $Facturas['Precio_Total'] ?></td>
+                            <td><?php echo $Facturas['Numero_Factura'] ?></td>
+                            <td><?php echo $Facturas['nombre'] . ' ' . $Facturas['apellido'] ?></td>
+                            <td><?php echo $Facturas['Direccion_Facturacion'] ?></td>
+                            <td><?php echo $Facturas['EstadoNombre'] ?></td>
+                            <td><?php echo $Facturas['Fecha_Pago'] ?></td>
+                            <td><?php echo $Facturas['Referencia_Pago'] ?></td>
                             <td>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <a href="?controller=Facturas&method=edit&idFacturas=<?php echo $Facturas->idFacturas ?>"
+                                    <a href="?controller=Facturas&method=edit&idFacturas=<?php echo $Facturas['idFacturas'] ?>"
                                         class="btn btn-primary">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="?controller=Facturas&method=deleteOut&idFacturas=<?php echo $Facturas->idFacturas ?>"
+                                    <a href="?controller=Facturas&method=deleteOut&idFacturas=<?php echo $Facturas['idFacturas'] ?>"
                                         class="btn btn-danger"
                                         onclick="return confirm('¿Estás seguro de que deseas eliminar este Comprobante De Pago?');">
                                         <i class="fas fa-trash-alt"></i>

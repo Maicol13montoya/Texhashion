@@ -142,17 +142,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js"></script>
 
 <!-- Debug de recursos cargados -->
-<?php
-echo "<div style='background:#ffe0e0; color:#900; padding:10px; margin:20px 0;'>";
-echo "<b>Recursos cargados en esta vista:</b><br>";
-echo '<ul>';
-echo '<li>fullcalendar.min.css</li>';
-echo '<li>fullcalendar.print.min.css</li>';
-echo '<li>moment.min.js</li>';
-echo '<li>fullcalendar.min.js</li>';
-echo '</ul>';
-echo '</div>';
-?>
+
+
 
 <style>
     body {

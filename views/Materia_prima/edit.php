@@ -2,7 +2,7 @@
     <div class="card-header container">
         <h2 class="m-auto">Editar Producto</h2>
     </div>
-    <form action="?controller=MateriaPrima&method=update" method="post" onsubmit="return validarFormulario()">
+    <form action="?controller=MateriaPriema&method=update" method="post" onsubmit="return validarFormulario()">
         <div class="card-body">
             <input type="hidden" id="idProducto" name="idProducto" value="<?php echo $data[0]->idProducto ?>">
             <div class="mb-3">

@@ -109,27 +109,34 @@ class MateriaPriemaController
     }
 
     public function save()
-    {
-        // Filtrar los datos que vienen del formulario
-        $data = [
-            'Nombre' => $_POST['Nombre'],
-            'Descripcion' => $_POST['Descripcion'],
-            'Fecha_Ingreso' => $_POST['Fecha_Ingreso'],
-            'Precio_Unidad' => $_POST['Precio_Unidad'],
-            'Cantidad_Stock' => $_POST['Cantidad_Stock'],
-            'id_Proveedor' => $_POST['id_Proveedor'],
-            'Categoria' => $_POST['estado'],
-            'Unidad_Medida' => $_POST['Unidad_Medida'],
-            'Fecha_Actualizacion' => $_POST['Fecha_Actualizacion'],
-            'Estado' => $_POST['estado']
-        ];
+{
+    // Filtrar los datos que vienen del formulario
+    $data = [
+        'Nombre' => $_POST['Nombre'],
+        'Descripcion' => $_POST['Descripcion'],
+        'Fecha_Ingreso' => $_POST['Fecha_Ingreso'],
+        'Precio_Unidad' => $_POST['Precio_Unidad'],
+        'Cantidad_Stock' => $_POST['Cantidad_Stock'],
+        'id_Proveedor' => $_POST['id_Proveedor'],
+        'Categoria' => $_POST['categoria'], // Corregido: era 'estado'
+        'Unidad_Medida' => $_POST['Unidad_Medida'],
+        'Fecha_Actualizacion' => $_POST['Fecha_Actualizacion'],
+        'Estado' => $_POST['estado'],
+        'status' => 'IN' // Agregado: estado por defecto
+    ];
 
-        // Llamar al modelo para realizar la inserción
-        $this->model->newMateriaPrima($data);
-
-        // Redirigir después de guardar
+    // Llamar al modelo para realizar la inserción
+    $result = $this->model->newMateriaPrima($data);
+    
+    if ($result === true) {
+        // Agregar exit() después del header para asegurar la redirección
         header('Location: ?controller=MateriaPriema&method=index');
+        exit();
+    } else {
+        // Manejar el error
+        echo "Error al guardar el producto: " . $result;
     }
+}
 
     public function edit()
     {

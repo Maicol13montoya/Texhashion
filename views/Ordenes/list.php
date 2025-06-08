@@ -1,7 +1,8 @@
 <?php
+
 ?>
 <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 <!-- FontAwesome para iconos -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
@@ -142,8 +143,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js"></script>
 
 <!-- Debug de recursos cargados -->
-
-
 
 <style>
     body {

@@ -1,3 +1,5 @@
+<?php
+?>
 <main class="container">
     <section class="col-md-12 text-left">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -10,7 +12,7 @@
                 </a>
 
                 <!-- Icono de notificación -->
-                <div style="position: relative; margin-left: 15px;"> <!-- Espacio entre los botones -->
+                <div style="position: relative; margin-left: 15px;">
                     <a href="#" id="notification-icon" class="btn btn-light">
                         <i class="fas fa-bell" style="font-size: 24px;"></i>
                         <!-- Contador de notificaciones -->
@@ -56,23 +58,23 @@
                 <tbody>
                     <?php foreach ($OrdenesController as $orden) : ?>
                         <tr>
-                            <td><?php echo $orden->idOrden ?></td>
-                            <td><?php echo $orden->nombre . ' ' . $orden->apellido ?></td>
-                            <td><?php echo $orden->Fecha_Orden ?></td>
-                            <td><?php echo $orden->Total_Total ?></td>
-                            <td><?php echo $orden->Cantidad_Producto ?></td>
-                            <td><?php echo $orden->Fecha_Entrega ?></td>
-                            <td><?php echo $orden->Nombre_Producto ?></td>
-                            <td><?php echo $orden->Nombre ?></td>
-                            <td><?php echo $orden->Estados ?></td>
+                            <td><?php echo $orden['idOrden'] ?></td>
+                            <td><?php echo $orden['nombre'] . ' ' . $orden['apellido'] ?></td>
+                            <td><?php echo $orden['Fecha_Orden'] ?></td>
+                            <td><?php echo $orden['Total_Total'] ?></td>
+                            <td><?php echo $orden['Cantidad_Producto'] ?></td>
+                            <td><?php echo $orden['Fecha_Entrega'] ?></td>
+                            <td><?php echo $orden['Nombre_Producto'] ?></td>
+                            <td><?php echo $orden['Nombre'] ?></td>
+                            <td><?php echo $orden['Estados'] ?></td>
                             <td>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <a href="?controller=Ordenes&method=edit&idOrden=<?php echo $orden->idOrden ?>" class="btn btn-primary">
-                                        <i class="fas fa-edit"></i> <!-- Icono de editar -->
+                                    <a href="?controller=Ordenes&method=edit&idOrden=<?php echo $orden['idOrden'] ?>" class="btn btn-primary">
+                                        <i class="fas fa-edit"></i>
                                     </a>
-                                  <a href="?controller=Ordenes&method=delete&idOrden=<?php echo $orden->idOrden ?>" class="btn btn-danger">
-                                        onclick="return confirm('¿Estás seguro de que deseas eliminar la orden #<?php echo $orden->idOrden ?>?');">
-                                        <i class="fas fa-trash-alt"></i> <!-- Icono de eliminar -->
+                                    <a href="?controller=Ordenes&method=delete&idOrden=<?php echo $orden['idOrden'] ?>" class="btn btn-danger"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar la orden #<?php echo $orden['idOrden'] ?>?');">
+                                        <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </div>
                             </td>
@@ -95,7 +97,7 @@
         // Mostrar/ocultar notificaciones al hacer clic en el icono
         $('#notification-icon').click(function(e) {
             e.preventDefault();
-            $('#notification-list').toggle(); // Mostrar u ocultar el listado de notificaciones
+            $('#notification-list').toggle();
         });
 
         // Usamos json_encode para convertir el array de PHP a JSON y luego lo procesamos en JavaScript
@@ -105,34 +107,49 @@
         var fullCalendarEvents = events.map(function(notificacion) {
             return {
                 title: notificacion.titulo,
-                start: notificacion.fecha, // Fecha de entrega
+                start: notificacion.fecha,
                 description: notificacion.mensaje,
-                color: '#f39c12' // Color para las notificaciones
+                color: '#f39c12'
             };
         });
 
         // Inicializar el calendario
         $('#calendar').fullCalendar({
             events: fullCalendarEvents,
-            editable: false, // Solo vista
-            droppable: false, // No se pueden mover los eventos
+            editable: false,
+            droppable: false,
             header: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
             eventRender: function(event, element) {
-                element.attr('title', event.description); // Mostrar descripción en tooltip
+                element.attr('title', event.description);
             }
         });
     });
 </script>
 
 <!-- Estilos y Scripts de FullCalendar -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.print.min.css" rel="stylesheet" media="print" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js"></script>
 
+<!-- Debug de recursos cargados -->
+<?php
+echo "<div style='background:#ffe0e0; color:#900; padding:10px; margin:20px 0;'>";
+echo "<b>Recursos cargados en esta vista:</b><br>";
+echo '<ul>';
+echo '<li>fullcalendar.min.css</li>';
+echo '<li>fullcalendar.print.min.css</li>';
+echo '<li>moment.min.js</li>';
+echo '<li>fullcalendar.min.js</li>';
+echo '</ul>';
+echo '</div>';
+?>
 
 <style>
-    /* Estilos generales para la página */
     body {
         background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 0%, rgba(0, 100, 148, 1) 100%);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -206,7 +223,6 @@
         padding: 10px;
     }
 
-    /* Estilos para el calendario */
     #calendar-container {
         margin-top: 30px;
     }
@@ -241,6 +257,5 @@
 
     .fc-day.fc-day-today {
         background-color: #ffec99;
-        /* Color para el día actual */
     }
 </style>

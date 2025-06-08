@@ -44,7 +44,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Categoría</label>
+                <label class="form-label">Categorías</label>
                 <select name="categoria" class="form-control" required>
                     <option value="">Seleccione...</option>
                     <?php foreach ($categorias as $categoria) { ?>

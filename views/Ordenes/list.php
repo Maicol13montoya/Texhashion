@@ -1,5 +1,10 @@
 <?php
 ?>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+<!-- FontAwesome para iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 <main class="container">
     <section class="col-md-12 text-left">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -85,7 +90,70 @@
         </section>
     </section>
 
-  
+    <!-- Calendario -->
+    <section class="col-md-12 mt-4" id="calendar-container">
+        <h3>Calendario de Entregas</h3>
+        <div id="calendar"></div>
+    </section>
+</main>
+
+<script>
+    $(function() {
+        // Mostrar/ocultar notificaciones al hacer clic en el icono
+        $('#notification-icon').click(function(e) {
+            e.preventDefault();
+            $('#notification-list').toggle();
+        });
+
+        // Usamos json_encode para convertir el array de PHP a JSON y luego lo procesamos en JavaScript
+        var events = <?php echo json_encode($arrNotificaciones); ?>;
+
+        // Convertir el array PHP a formato adecuado para fullCalendar
+        var fullCalendarEvents = events.map(function(notificacion) {
+            return {
+                title: notificacion.titulo,
+                start: notificacion.fecha,
+                description: notificacion.mensaje,
+                color: '#f39c12'
+            };
+        });
+
+        // Inicializar el calendario
+        $('#calendar').fullCalendar({
+            events: fullCalendarEvents,
+            editable: false,
+            droppable: false,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            eventRender: function(event, element) {
+                element.attr('title', event.description);
+            }
+        });
+    });
+</script>
+
+<!-- Estilos y Scripts de FullCalendar -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.print.min.css" rel="stylesheet" media="print" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js"></script>
+
+<!-- Debug de recursos cargados -->
+<?php
+echo "<div style='background:#ffe0e0; color:#900; padding:10px; margin:20px 0;'>";
+echo "<b>Recursos cargados en esta vista:</b><br>";
+echo '<ul>';
+echo '<li>fullcalendar.min.css</li>';
+echo '<li>fullcalendar.print.min.css</li>';
+echo '<li>moment.min.js</li>';
+echo '<li>fullcalendar.min.js</li>';
+echo '</ul>';
+echo '</div>';
+?>
+
 <style>
     body {
         background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 0%, rgba(0, 100, 148, 1) 100%);

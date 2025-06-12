@@ -19,7 +19,7 @@ class HomeController
     {
         // Cargar la vista del home
         try {
-            require 'views/home.php';
+            require_once 'vistas/inicio.php';
         } catch (Exception $e) {
             error_log("Error al cargar vistas: " . $e->getMessage()); // Registro de error
             echo "Error al cargar la vista."; // Mensaje de error simple

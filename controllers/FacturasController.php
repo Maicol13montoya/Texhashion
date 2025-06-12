@@ -1,8 +1,8 @@
 <?php
-require 'models/Facturas.php';
-require 'models/Usuario.php';
-require 'models/Estado.php';
-require 'models/ProductosTerminados.php';
+require_once'models/Facturas.php';
+require_once 'models/Usuario.php';
+require_once 'models/Estado.php';
+require_once 'models/ProductosTerminados.php';
 
 class FacturasController
 {
@@ -51,7 +51,7 @@ class FacturasController
             }
 
             ob_start();
-            require 'views/Factura/list.php'; // Vista para listar facturas
+      include_once'views/Factura/list.php'; // Vista para listar facturas
             $content = ob_get_clean();
             require 'views/home.php';
         } else {

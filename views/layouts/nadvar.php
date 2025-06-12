@@ -11,7 +11,8 @@
                 </a>
 
                 <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                    <img src="https://img.freepik.com/vector-premium/icono-circulo-usuario-anonimo-ilustracion-vector-estilo-plano-sombra_520826-1931.jpg"
+            <img src="https://img.freepik.com/vector-premium/icono-circulo-usuario-anonimo-ilustracion-vector-estilo-plano-sombra_520826-1931.jpg" alt="Usuario anónimo">
+
                         alt="Descripción de la imagen" class="rounded-circle" width="50" height="50">
                     <span class="text-dark fw-bold">
                         <?php echo htmlspecialchars($_SESSION['user'])?>

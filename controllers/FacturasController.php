@@ -50,14 +50,15 @@ class FacturasController
                 array_push($arrProductosTerminado, $ProductoTerminado);
             }
 
-            ob_start();
-      include_once'views/Factura/list.php'; // Vista para listar facturas
-            $content = ob_get_clean();
-            require 'views/home.php';
-        } else {
-            require 'views/login.php';
-        }
-    }
+        ob_start();
+include_once 'vistas/Factura/lista.php'; // Vista para listar facturas
+$contenido = ob_get_clean();
+require_once 'vistas/inicio.php';
+
+} else {
+    require_once 'vistas/login.php';
+}
+
 
     public function add()
     {

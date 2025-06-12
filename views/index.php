@@ -73,11 +73,10 @@
         <!-- Contenedor del carrusel -->
         <div class="carousel">
             <!-- Contenedor de las imágenes -->
-            <div class="carousel-images">
-            <img src="./assets/img/imagen1.png" alt="Imagen1" class="carousel-img" />
-            <img src="./assets/img\M.1.jpg" alt="Imagen1" class="carousel-img" />
-            <img src="./assets/img\obraluisdomingo.png" alt="Imagen1" class="carousel-img" />
-            </div>
+            <img src="./assets/img/imagen1.png" alt="Primera vista" class="carousel-img" />
+<img src="./assets/img/M.1.jpg" alt="Evento M.1" class="carousel-img" />
+<img src="./assets/img/obraluisdomingo.png" alt="Obra de Luis Domingo" class="carousel-img" />
+
             <!-- Botones de navegación -->
             <button class="carousel-button prev" onclick="prevSlide()">&#10094;</button>
             <button class="carousel-button next" onclick="nextSlide()">&#10095;</button>

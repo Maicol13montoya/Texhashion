@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-include_once('layouts/head.php');
-?>
+<head>
+    <title>Inicio - TexFashion</title>
+    </head>
+    <?php include_once('layouts/head.php'); ?>
+
+
 <script>
     var height = window.innerHeight - 2;
     var porh = (height * 74 / 100);

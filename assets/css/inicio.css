@@ -1139,12 +1139,12 @@ h4.sub-title {
     display: inline-block;
     transition: none;
     font-style: normal;
-    font-weight: normal;
     font-size: 16px;
     line-height: 25px;
     color: var(--white-color);
     text-transform: capitalize;
 }
+
 
 .tank-header-4 .angle-dropdown {
     display: inline-block;

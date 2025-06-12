@@ -5353,11 +5353,11 @@ fieldset:disabled .btn {
         border-top-width: var(--bs-list-group-border-width)
     }
 
-    .list-group-horizontal-md>.list-group-item+.list-group-item.active {
-        border-left-width: var(--bs-list-group-border-width);
-        margin-left: calc(var(--bs-list-group-border-width)*-1)
-    }
+    .list-group-horizontal-md > .list-group-item + .list-group-item.active {
+    border-left-width: var(--bs-list-group-border-width);
+    margin-left: calc(var(--bs-list-group-border-width) * -1);
 }
+
 
 @media(min-width:992px) {
     .list-group-horizontal-lg {

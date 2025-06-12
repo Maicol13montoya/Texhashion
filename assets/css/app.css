@@ -5052,20 +5052,21 @@ fieldset:disabled .btn {
 
 .card-header-tabs {
     border-bottom: 0;
-    margin-bottom: calc(var(--bs-card-cap-padding-y)*-1);
-    margin-left: calc(var(--bs-card-cap-padding-x)*-.5);
-    margin-right: calc(var(--bs-card-cap-padding-x)*-.5)
+    margin-bottom: calc(var(--bs-card-cap-padding-y) * -1);
+    margin-left: calc(var(--bs-card-cap-padding-x) * -0.5);
+    margin-right: calc(var(--bs-card-cap-padding-x) * -0.5);
 }
 
 .card-header-tabs .nav-link.active {
     background-color: var(--bs-card-bg);
-    border-bottom-color: var(--bs-card-bg)
+    border-bottom-color: var(--bs-card-bg);
 }
 
 .card-header-pills {
-    margin-left: calc(var(--bs-card-cap-padding-x)*-.5);
-    margin-right: calc(var(--bs-card-cap-padding-x)*-.5)
+    margin-left: calc(var(--bs-card-cap-padding-x) * -0.5);
+    margin-right: calc(var(--bs-card-cap-padding-x) * -0.5);
 }
+
 
 .card-img-overlay {
     border-radius: var(--bs-card-inner-border-radius);

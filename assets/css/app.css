@@ -5011,7 +5011,7 @@ fieldset:disabled .btn {
 
 .card-subtitle {
     color: var(--bs-card-subtitle-color);
-    margin-top: calc(var(--bs-card-title-spacer-y)*-.5)
+    margin-top: calc(var(--bs-card-title-spacer-y) * -0.5);
 }
 
 .card-subtitle,

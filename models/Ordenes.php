@@ -1,5 +1,4 @@
 <?php
-
 class Orden
 {
     private $idOrden;
@@ -14,7 +13,8 @@ class Orden
     private $status;
     private $pdo;
 
-    function __construct()
+    // Constructor con visibilidad explícita
+    public function __construct()
     {
         try {
             $this->pdo = new Database;
@@ -26,10 +26,12 @@ class Orden
     public function getAll()
     {
         try {
-            $strSql = "SELECT * FROM orden o JOIN estados e ON o.Estado = e.idEstados
-                    JOIN productos_terminados pt ON o.idProductosTerminados = pt.idProductos
-                    JOIN materia_prima mp ON o.idMateriaPrima = mp.idProducto
-                    JOIN usuario u ON o.idCliente = u.id  WHERE o.status = 'IN'"; 
+            $strSql = "SELECT * FROM orden o 
+                       JOIN estados e ON o.Estado = e.idEstados
+                       JOIN productos_terminados pt ON o.idProductosTerminados = pt.idProductos
+                       JOIN materia_prima mp ON o.idMateriaPrima = mp.idProducto
+                       JOIN usuario u ON o.idCliente = u.id  
+                       WHERE o.status = 'IN'";
             $query = $this->pdo->select($strSql);
             return $query;
         } catch (PDOException $e) {
@@ -50,10 +52,15 @@ class Orden
     public function getOrdenById($idOrden)
     {
         try {
-            $strSql = "SELECT o.*, e.Estados AS EstadoNombre, pt.Nombre_Producto AS ProductoTerminadoNombre, mp.Nombre AS MateriaPrimaNombre, c.nombre AS ClienteNombre, c.apellido AS ClienteApellido
+            $strSql = "SELECT o.*, 
+                              e.Estados AS EstadoNombre, 
+                              pt.Nombre_Producto AS ProductoTerminadoNombre, 
+                              mp.Nombre AS MateriaPrimaNombre, 
+                              c.nombre AS ClienteNombre, 
+                              c.apellido AS ClienteApellido
                        FROM orden o 
                        JOIN estados e ON o.Estado = e.idEstados 
-                       JOIN productos_terminados pt ON o.idProductosTerminados = pt.idmateria_prima
+                       JOIN productos_terminados pt ON o.idProductosTerminados = pt.idProductos
                        JOIN materia_prima mp ON o.idMateriaPrima = mp.idProducto
                        JOIN usuario c ON o.idCliente = c.id
                        WHERE o.idOrden = :idOrden";
@@ -76,21 +83,16 @@ class Orden
     }
 
     public function deleteOrdenes($idOrden)
-{
-    try {
-        // Actualiza el estado de la orden a 'OUT' (en lugar de eliminarla físicamente)
-        $strWhere = 'idOrden = :idOrden';
-        $data = ['status' => 'OUT', 'idOrden' => $idOrden];
-
-        // Realiza la actualización
-        $this->pdo->update('orden', $data, $strWhere);
-
-        return true;
-    } catch (PDOException $e) {
-        return $e->getMessage();
+    {
+        try {
+            $strWhere = 'idOrden = :idOrden';
+            $data = ['status' => 'OUT', 'idOrden' => $idOrden];
+            $this->pdo->update('orden', $data, $strWhere);
+            return true;
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
     }
-}
-
 
     public function getRol()
     {
@@ -117,7 +119,7 @@ class Orden
     public function getMateriasPrimas()
     {
         try {
-            $strSql = "SELECT idMateriaPrima, NombreMateriaPrima FROM materia_prima";
+            $strSql = "SELECT idProducto AS idMateriaPrima, Nombre AS NombreMateriaPrima FROM materia_prima";
             $query = $this->pdo->select($strSql);
             return $query;
         } catch (PDOException $e) {
@@ -134,6 +136,5 @@ class Orden
         } catch (PDOException $e) {
             return $e->getMessage();
         }
-        
     }
 }

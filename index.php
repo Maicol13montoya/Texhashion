@@ -5,41 +5,46 @@ require_once 'providers/Database.php';
 $defaultController = 'IndexController';
 $defaultMethod = 'index';
 
-// Lista blanca de controladores permitidos
-$allowedControllers = [
-    'IndexController',
-    'LoginController',
-    'FacturasController',
-    'UsuariosController',
-    'MateriaprimaController',
-    'OrdenesController',
-    'ProductosTerminadosController',
-    'CorreoController',
-    'HomeController'
+// Lista blanca de rutas válidas (controlador => métodos permitidos)
+$allowedRoutes = [
+    'index' => ['controller' => 'IndexController', 'methods' => ['index']],
+    'login' => ['controller' => 'LoginController', 'methods' => ['index', 'validar', 'logout']],
+    'facturas' => ['controller' => 'FacturasController', 'methods' => ['index', 'ver']],
+    'usuarios' => ['controller' => 'UsuariosController', 'methods' => ['index', 'crear', 'editar']],
+    'materiaprima' => ['controller' => 'MateriaprimaController', 'methods' => ['index', 'agregar']],
+    'ordenes' => ['controller' => 'OrdenesController', 'methods' => ['index', 'generar']],
+    'producto' => ['controller' => 'ProductosTerminadosController', 'methods' => ['index', 'detalle']],
+    'correo' => ['controller' => 'CorreoController', 'methods' => ['enviar']],
+    'home' => ['controller' => 'HomeController', 'methods' => ['index']]
 ];
 
-// Obtener controlador desde la URL o usar el predeterminado
-$controllerParam = isset($_REQUEST['controller']) ? $_REQUEST['controller'] : '';
-$controllerName = ucfirst($controllerParam) . 'Controller';
-$controllerName = in_array($controllerName, $allowedControllers) ? $controllerName : $defaultController;
+// Obtener parámetros
+$controllerKey = strtolower($_REQUEST['controller'] ?? 'index');
+$method = $_REQUEST['method'] ?? 'index';
 
-// Obtener método desde la URL o usar el predeterminado
-$method = isset($_REQUEST['method']) ? $_REQUEST['method'] : $defaultMethod;
+// Verificar si el controlador está permitido
+if (!array_key_exists($controllerKey, $allowedRoutes)) {
+    die("Error: controlador no permitido.");
+}
 
-// Verificar si el archivo del controlador existe
+$route = $allowedRoutes[$controllerKey];
+$controllerName = $route['controller'];
+
+// Verificar si el método está permitido para ese controlador
+if (!in_array($method, $route['methods'])) {
+    die("Error: método no permitido para este controlador.");
+}
+
+// Verificar si el archivo existe
 $controllerFile = "controllers/" . $controllerName . ".php";
 if (!file_exists($controllerFile)) {
     die("Error: archivo del controlador no encontrado.");
 }
 require_once $controllerFile;
 
-// Crear instancia del controlador
+// Instanciar el controlador y llamar al método
 $controller = new $controllerName();
-
-// Verificar si el método existe en el controlador
 if (!method_exists($controller, $method)) {
     die("Error: método no válido en el controlador.");
 }
-
-// Ejecutar el método de forma segura
 call_user_func([$controller, $method]);

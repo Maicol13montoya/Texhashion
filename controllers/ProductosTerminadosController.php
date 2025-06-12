@@ -38,11 +38,11 @@ class ProductosTerminadosController
             }
 
             ob_start();
-            require 'views/Produtos_Terminados/list.php';
+            require_once 'views/Produtos_Terminados/list.php';
             $content = ob_get_clean();
-            require 'views/home.php';
+            require_once 'views/home.php';
         } else {
-            require 'views/login.php';
+            require_once 'views/login.php';
         }
     }
 
@@ -58,7 +58,6 @@ class ProductosTerminadosController
                 'idmateria_prima' => $_POST['idmateria_prima'],
                 'idEstado' => $_POST['Estado']
             ];
-
             $this->model->newProductoTerminado($data);
             header('Location: ?controller=ProductosTerminados&method=index');
             exit();
@@ -66,10 +65,11 @@ class ProductosTerminadosController
 
         $materiaPrima = $this->materiaPrima->getAll();
         $estados = $this->estados->getAll();
+
         ob_start();
-        require 'views/Produtos_Terminados/new.php';
+        require_once 'views/Produtos_Terminados/new.php';
         $content = ob_get_clean();
-        require 'views/home.php';
+        require_once 'views/home.php';
     }
 
     public function saveProductoTerminado()
@@ -84,6 +84,7 @@ class ProductosTerminadosController
                 'idmateria_prima' => $_POST['idmateria_prima'],
                 'idEstado' => $_POST['idEstado']
             ];
+
             try {
                 $this->model->newProductoTerminado($data);
                 header('Location: ?controller=ProductosTerminados&method=index');
@@ -101,10 +102,11 @@ class ProductosTerminadosController
             $data = $this->model->getProductoTerminadoId($idProductos);
             $materiaPrima = $this->materiaPrima->getAll();
             $estados = $this->estados->getAll();
+
             ob_start();
-            require 'views/Produtos_Terminados/edit.php';
+            require_once 'views/Produtos_Terminados/edit.php';
             $content = ob_get_clean();
-            require 'views/home.php';
+            require_once 'views/home.php';
         } else {
             echo "Error: 'idProductos' no está definido.";
         }

@@ -4345,8 +4345,9 @@ fieldset:disabled .btn {
     border: var(--bs-nav-tabs-border-width) solid transparent;
     border-top-left-radius: var(--bs-nav-tabs-border-radius);
     border-top-right-radius: var(--bs-nav-tabs-border-radius);
-    margin-bottom: calc(var(--bs-nav-tabs-border-width)*-1)
+    margin-bottom: calc(var(--bs-nav-tabs-border-width) * -1);
 }
+
 
 .nav-tabs .nav-link:focus,
 .nav-tabs .nav-link:hover {

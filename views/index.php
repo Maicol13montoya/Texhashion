@@ -396,9 +396,11 @@
                         <p><strong>LUNES - SÁBADOS:</strong> 9 am - 6 pm</p>
                         <p><strong>DOMINGOS:</strong> 10 am - 1 pm</p>
                     </div>
-                    <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.2360623589466!2d-74.1078225!3d4.4972359!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9b9a86e77d9f%3A0x24a0010c00863e34!2sTex%20fashion!5e0!3m2!1ses!2sco!4v1607040460989!5m2!1ses!2sco"
-                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                   <iframe
+  title="Ubicación de Tex Fashion en Google Maps"
+  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.2360623589466!2d-74.1078225!3d4.4972359!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9b9a86e77d9f%3A0x24a0010c00863e34!2sTex%20fashion!5e0!3m2!1ses!2sco!4v1607040460989!5m2!1ses!2sco"
+  width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+</iframe>
 
 
 

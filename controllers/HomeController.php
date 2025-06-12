@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Clase HomeController para cargar el home del proyecto
  */

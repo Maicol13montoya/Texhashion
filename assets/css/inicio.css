@@ -3535,13 +3535,12 @@ body::after {
     margin-bottom: 1.5rem;
 }
 
-.tank-contacts-12 form.main-input input,
+.tank-contacts-12 form .main-input input,
 .tank-contacts-12 textarea {
     color: rgb(0, 0, 0);
     font-size: 16px;
-    border: none;
-    padding: 12px;
     border: 1px solid #ddd;
+    padding: 12px;
     width: 100%;
     line-height: 24px;
     border-radius: 4px;

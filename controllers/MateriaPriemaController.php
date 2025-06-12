@@ -3,9 +3,9 @@ require_once 'models/Materia_prima.php';
 require_once 'models/Usuario.php';
 require_once 'models/Categoria.php';
 require_once 'models/Estado.php';
-require_once 'models/Unidada_medida.php';
+require_once 'models/Unidad_medida.php';
 
-class MateriaPriemaController
+class MateriaPrimaController
 {
     private $model;
     private $usuarios;
@@ -19,7 +19,7 @@ class MateriaPriemaController
             $this->model = new MateriaPrima;
             $this->categorias = new Categoria;
             $this->estados = new Estado;
-            $this->unidad_medidas = new UnidadaMedida;
+            $this->unidad_medidas = new UnidadMedida;
             $this->usuarios = new Usuarios;
 
             if (!isset($_SESSION['user'])) {
@@ -33,25 +33,25 @@ class MateriaPriemaController
     public function index()
     {
         if (isset($_SESSION['user'])) {
-            $MateriaPriemaController = $this->model->getAll();
+            $materiaPrimaList = $this->model->getAll();
             $arrCategoria = [];
             $arrEstado = [];
             $arrUniMed = [];
             $arrProveedores = [];
 
-            foreach ($MateriaPriemaController as $MateriaPrima) {
-                array_push($arrCategoria, $this->model->getCategorias($MateriaPrima['idProducto']));
-                array_push($arrEstado, $this->model->getEstados($MateriaPrima['idProducto']));
-                array_push($arrUniMed, $this->model->getUnidadMedida($MateriaPrima['idProducto']));
-                array_push($arrProveedores, $this->model->getProveedores($MateriaPrima['idProducto']));
+            foreach ($materiaPrimaList as $materiaPrima) {
+                array_push($arrCategoria, $this->model->getCategorias($materiaPrima['idProducto']));
+                array_push($arrEstado, $this->model->getEstados($materiaPrima['idProducto']));
+                array_push($arrUniMed, $this->model->getUnidadMedida($materiaPrima['idProducto']));
+                array_push($arrProveedores, $this->model->getProveedores($materiaPrima['idProducto']));
             }
 
             ob_start();
-            require 'views/Materia_prima/list.php';
+            require_once 'views/Materia_prima/list.php';
             $content = ob_get_clean();
-            require 'views/home.php';
+            require_once 'views/home.php';
         } else {
-            require 'views/login.php';
+            require_once 'views/login.php';
         }
     }
 
@@ -69,7 +69,7 @@ class MateriaPriemaController
                 $_POST['Unidad_Medida'],
                 $_POST['Estado']
             );
-            header('Location: ?controller=MateriaPriema&method=index');
+            header('Location: ?controller=MateriaPrima&method=index');
             exit();
         }
 
@@ -79,9 +79,9 @@ class MateriaPriemaController
         $usuarios = $this->usuarios->getAll();
 
         ob_start();
-        require 'views/Materia_prima/new.php';
+        require_once 'views/Materia_prima/new.php';
         $content = ob_get_clean();
-        require 'views/home.php';
+        require_once 'views/home.php';
     }
 
     public function save()
@@ -93,17 +93,17 @@ class MateriaPriemaController
             'Precio_Unidad' => $_POST['Precio_Unidad'],
             'Cantidad_Stock' => $_POST['Cantidad_Stock'],
             'id_Proveedor' => $_POST['id_Proveedor'],
-            'Categoria' => $_POST['categoria'],
+            'Categoria' => $_POST['Categoria'],
             'Unidad_Medida' => $_POST['Unidad_Medida'],
             'Fecha_Actualizacion' => $_POST['Fecha_Actualizacion'],
-            'Estado' => $_POST['estado'],
+            'Estado' => $_POST['Estado'],
             'status' => 'IN'
         ];
 
         $result = $this->model->newMateriaPrima($data);
 
         if ($result === true) {
-            header('Location: ?controller=MateriaPriema&method=index');
+            header('Location: ?controller=MateriaPrima&method=index');
             exit();
         } else {
             echo "Error al guardar el producto: " . $result;
@@ -121,9 +121,9 @@ class MateriaPriemaController
             $categorias = $this->model->getCategorias($idProducto);
 
             ob_start();
-            require 'views/Materia_prima/edit.php';
+            require_once 'views/Materia_prima/edit.php';
             $content = ob_get_clean();
-            require 'views/home.php';
+            require_once 'views/home.php';
         } else {
             echo "Error: 'idProducto' no está definido.";
         }
@@ -131,7 +131,7 @@ class MateriaPriemaController
 
     public function update()
     {
-        if (isset($_POST)) {
+        if ($_POST) {
             $dataMateriaPrima = [
                 'idProducto' => $_POST['idProducto'],
                 'Nombre' => $_POST['Nombre'],
@@ -140,13 +140,15 @@ class MateriaPriemaController
                 'Precio_Unidad' => $_POST['Precio_Unidad'],
                 'Cantidad_Stock' => $_POST['Cantidad_Stock'],
                 'id_Proveedor' => $_POST['id_Proveedor'],
-                'categoria' => $_POST['categoria'],
+                'Categoria' => $_POST['Categoria'],
                 'Unidad_Medida' => $_POST['Unidad_Medida'],
                 'Fecha_Actualizacion' => $_POST['Fecha_Actualizacion'],
-                'estado' => $_POST['estado']
+                'Estado' => $_POST['Estado']
             ];
+
             $this->model->editMateriaPrima($dataMateriaPrima);
-            header('Location: ?controller=MateriaPriema&method=index');
+            header('Location: ?controller=MateriaPrima&method=index');
+            exit();
         }
     }
 
@@ -155,8 +157,9 @@ class MateriaPriemaController
         if (isset($_REQUEST['idProducto'])) {
             $idProducto = $_REQUEST['idProducto'];
             $result = $this->model->deleteMateriaPrima($idProducto);
+
             if ($result === true) {
-                header('Location: ?controller=MateriaPriema&method=index');
+                header('Location: ?controller=MateriaPrima&method=index');
                 exit();
             } else {
                 echo "Error al eliminar la materia prima: " . $result;

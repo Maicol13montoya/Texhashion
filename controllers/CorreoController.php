@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php'; // Composer autoload para PHPMailer
+require_once 'vendor/autoload.php'; // Carga automática del compositor para PHPMailer
 
 class CorreoController
 {

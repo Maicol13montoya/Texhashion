@@ -812,7 +812,7 @@ h4.sub-title {
     font-style: normal;
     font-weight: normal;
     padding-left: 15px;
-    padding-right: 15px;
+    padding-right: 38px; /* Se deja solo una versión, combinada */
     padding-top: 10px;
     padding-bottom: 10px;
     background: transparent;
@@ -820,15 +820,14 @@ h4.sub-title {
     border-radius: 4px;
     font-size: 16px;
     -webkit-appearance: none;
-    border: 1px solid "dedede";
-    padding-right: 38px;
-
+    border: 1px solid #dedede;
 }
 
-.tank-bootstrap-header button.btn-search {
+.tank-bootstrap-header .btn-search {
     right: 0;
     color: #fff;
 }
+
 
 .tank-bootstrap-header a.navbar-brand {
     color: var(--white-color);

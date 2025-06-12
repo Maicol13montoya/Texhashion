@@ -5266,9 +5266,9 @@ fieldset:disabled .btn {
     border-top-width: 0
 }
 
-.list-group-item+.list-group-item.active {
+.list-group-item + .list-group-item.active {
     border-top-width: var(--bs-list-group-border-width);
-    margin-top: calc(var(--bs-list-group-border-width)*-1)
+    margin-top: calc(var(--bs-list-group-border-width) * -1);
 }
 
 .list-group-horizontal {

@@ -2,17 +2,45 @@
 session_start();
 require_once 'providers/Database.php';
 
-$controller = 'IndexController';
+// Lista blanca de controladores permitidos
+$allowedControllers = [
+    'CorreoController',
+    'FacturasController',
+    'HomeController',
+    'IndexController',
+    'LoginController',
+    'MateriaPriemaController', // Corrige si es necesario
+    'OrdenesController',
+    'ProductosTerminadosController',
+    'UsuariosController'
+];
 
-if (!isset($_REQUEST['controller'])) {
-	require_once "controllers/" . $controller . ".php";
-	$controller = new $controller;
-	$controller->index();
-} else {
-	$controller = ucfirst($_REQUEST['controller']) . 'Controller';
-	$method = isset($_REQUEST['method']) ? $_REQUEST['method'] : 'index';
-	require_once "controllers/" . $controller . ".php";
+$defaultController = 'IndexController';
+$defaultMethod = 'index';
 
-	$controller = new $controller;
-	call_user_func(array($controller, $method));
+// Obtener controlador y método desde la URL
+$controllerName = isset($_REQUEST['controller']) ? ucfirst($_REQUEST['controller']) . 'Controller' : $defaultController;
+$method = isset($_REQUEST['method']) ? $_REQUEST['method'] : $defaultMethod;
+
+// Validación segura del controlador
+if (!in_array($controllerName, $allowedControllers)) {
+    die("Error: controlador no válido.");
 }
+
+// Verificar existencia del archivo antes de incluirlo
+$controllerFile = "controllers/" . $controllerName . ".php";
+if (!file_exists($controllerFile)) {
+    die("Error: archivo de controlador no encontrado.");
+}
+
+require_once $controllerFile;
+
+// Instanciar controlador y llamar al método
+$controller = new $controllerName();
+
+if (!method_exists($controller, $method)) {
+    die("Error: método '$method' no encontrado en '$controllerName'.");
+}
+
+call_user_func([$controller, $method]);
+?>

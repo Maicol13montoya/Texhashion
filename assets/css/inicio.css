@@ -1101,7 +1101,7 @@ h4.sub-title {
     font-style: normal;
     font-weight: normal;
     padding-left: 15px;
-    padding-right: 15px;
+    padding-right: 38px; /* Se mantiene el valor mayor para evitar duplicados */
     padding-top: 10px;
     padding-bottom: 10px;
     background: transparent;
@@ -1110,8 +1110,6 @@ h4.sub-title {
     font-size: 16px;
     -webkit-appearance: none;
     border: 1px solid #dedede;
-    padding-right: 38px;
-
 }
 
 .tank-header-4 button.btn-search {

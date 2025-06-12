@@ -264,12 +264,12 @@
                                     </a>
                                 </div>
                                 <div class="product">
-                                    <a>
-                                        <figure>
-                                        <img src="./assets/img/camisanegra.png" alt="Imagen1"  
-                                        class="img-responsive animated-img"/>  
-                                        </figure>
-                                    </a>
+                                   <a>
+  <figure>
+    <img src="./assets/img/camisanegra.png" alt="Camiseta negra" class="img-responsive animated-img" />
+  </figure>
+</a>
+
                                 </div>
                                 <div class="product">
                                    <a>

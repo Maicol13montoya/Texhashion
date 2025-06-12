@@ -2,100 +2,103 @@
     <div class="card-header container">
         <h2 class="m-auto">Editar Producto</h2>
     </div>
-    <form action="?controller=MateriaPriema&method=update" method="post" onsubmit="return validarFormulario()">
-        <div class="card-body">
-            <input type="hidden" id="idProducto" name="idProducto" value="<?php echo $data[0]->idProducto ?>">
-            
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" id="nombre" class="form-control" name="Nombre" 
-                       value="<?php echo $data[0]->Nombre ?>" required
-                       oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
-            </div>
+   <form action="?controller=MateriaPriema&method=update" method="post" onsubmit="return validarFormulario()">
+    <div class="card-body">
+        <input type="hidden" id="idProducto" name="idProducto" value="<?php echo $datos[0]->idProducto; ?>">
 
-            <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripción</label>
-                <textarea id="descripcion" class="form-control" name="Descripcion" required><?php echo $data[0]->Descripcion ?></textarea>
-            </div>
-
-            <div class="mb-3">
-                <label for="fecha_ingreso" class="form-label">Fecha ENTRADA</label>
-                <input type="date" id="fecha_ingreso" class="form-control" name="Fecha_Ingreso" 
-                       value="<?php echo $data[0]->Fecha_Ingreso ?>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="precio_unidad" class="form-label">Precio Unidad</label>
-                <input type="number" id="precio_unidad" step="0.01" class="form-control" name="Precio_Unidad" 
-                       value="<?php echo $data[0]->Precio_Unidad ?>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="cantidad_stock" class="form-label">Cantidad en Stock</label>
-                <input type="number" id="cantidad_stock" class="form-control" name="Cantidad_Stock" 
-                       value="<?php echo $data[0]->Cantidad_Stock ?>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="id_proveedor" class="form-label">Proveedor</label>
-                <select name="id_Proveedor" id="id_proveedor" class="form-control" required>
-                    <option value="">Seleccione...</option>
-                    <?php foreach ($proveedores as $proveedor) { ?>
-                        <option value="<?php echo $proveedor->id ?>" <?php echo $proveedor->id == $data[0]->id_Proveedor ? 'selected' : '' ?>>
-                            <?php echo $proveedor->nombre . ' ' . $proveedor->apellido ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="categoria" class="form-label">Categorías</label>
-                <select name="categoria" id="categoria" class="form-control" required>
-                    <option value="">Seleccione...</option>
-                    <?php foreach ($categorias as $categoria) { ?>
-                        <option value="<?php echo $categoria->idCategoria ?>" <?php echo $categoria->idCategoria == $data[0]->Categoria ? 'selected' : '' ?>>
-                            <?php echo $categoria->Categoria ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="unidad_medida" class="form-label">Unidad de Medida</label>
-                <select name="Unidad_Medida" id="unidad_medida" class="form-control" required>
-                    <option value="">Seleccione...</option>
-                    <?php foreach ($unidadMedidas as $uni_med) { ?>
-                        <option value="<?php echo $uni_med->MedidaID ?>" <?php echo $uni_med->MedidaID == $data[0]->Unidad_Medida ? 'selected' : '' ?>>
-                            <?php echo $uni_med->Uni_Med ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="fecha_actualizacion" class="form-label">Fecha Actualización</label>
-                <input type="date" id="fecha_actualizacion" class="form-control" name="Fecha_Actualizacion" 
-                       value="<?php echo $data[0]->Fecha_Actualizacion ?>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="estado" class="form-label">Estado</label>
-                <select name="estado" id="estado" class="form-control" required>
-                    <option value="">Seleccione...</option>
-                    <?php foreach ($estados as $estado) { ?>
-                        <option value="<?php echo $estado->idEstados ?>" <?php echo $estado->idEstados == $data[0]->Estado ? 'selected' : '' ?>>
-                            <?php echo $estado->Estados ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" id="submit">Actualizar</button>
-            </div>
+        <div class="mb-3">
+            <label for="Nombre" class="form-label">Nombre</label>
+            <input type="text" id="Nombre" class="form-control" name="Nombre"
+                value="<?php echo $datos[0]->Nombre; ?>" required
+                oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
         </div>
-    </form>
-</div>
+
+        <div class="mb-3">
+            <label for="Descripcion" class="form-label">Descripción</label>
+            <textarea id="Descripcion" class="form-control" name="Descripcion" required><?php echo $datos[0]->Descripcion; ?></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="Fecha_Ingreso" class="form-label">Fecha de entrada</label>
+            <input type="date" id="Fecha_Ingreso" class="form-control" name="Fecha_Ingreso"
+                value="<?php echo $datos[0]->Fecha_Ingreso; ?>" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="Precio_Unidad" class="form-label">Precio Unidad</label>
+            <input type="number" step="0.01" id="Precio_Unidad" class="form-control" name="Precio_Unidad"
+                value="<?php echo $datos[0]->Precio_Unidad; ?>" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="Cantidad_Stock" class="form-label">Cantidad en stock</label>
+            <input type="number" id="Cantidad_Stock" class="form-control" name="Cantidad_Stock"
+                value="<?php echo $datos[0]->Cantidad_Stock; ?>" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_Proveedor" class="form-label">Proveedor</label>
+            <select name="id_Proveedor" id="id_Proveedor" class="form-control" required>
+                <option value="">Selección...</option>
+                <?php foreach ($proveedores as $proveedor) { ?>
+                    <option value="<?php echo $proveedor->id; ?>"
+                        <?php echo $proveedor->id == $datos[0]->id_Proveedor ? 'selected' : ''; ?>>
+                        <?php echo $proveedor->nombre . ' ' . $proveedor->apellido; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="categoria" class="form-label">Categorías</label>
+            <select name="categoria" id="categoria" class="form-control" required>
+                <option value="">Selección...</option>
+                <?php foreach ($categorias as $categoria) { ?>
+                    <option value="<?php echo $categoria->idCategoria; ?>"
+                        <?php echo $categoria->idCategoria == $datos[0]->Categoria ? 'selected' : ''; ?>>
+                        <?php echo $categoria->Categoria; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="Unidad_Medida" class="form-label">Unidad de Medida</label>
+            <select name="Unidad_Medida" id="Unidad_Medida" class="form-control" required>
+                <option value="">Selección...</option>
+                <?php foreach ($unidadMedidas as $uni_med) { ?>
+                    <option value="<?php echo $uni_med->MedidaID; ?>"
+                        <?php echo $uni_med->MedidaID == $datos[0]->Unidad_Medida ? 'selected' : ''; ?>>
+                        <?php echo $uni_med->Uni_Med; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="Fecha_Actualizacion" class="form-label">Fecha Actualización</label>
+            <input type="date" id="Fecha_Actualizacion" class="form-control" name="Fecha_Actualizacion"
+                value="<?php echo $datos[0]->Fecha_Actualizacion; ?>" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="estado" class="form-label">Estado</label>
+            <select name="estado" id="estado" class="form-control" required>
+                <option value="">Selección...</option>
+                <?php foreach ($estados as $estado) { ?>
+                    <option value="<?php echo $estado->idEstados; ?>"
+                        <?php echo $estado->idEstados == $datos[0]->estado ? 'selected' : ''; ?>>
+                        <?php echo $estado->Estados; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Actualizar</button>
+        </div>
+    </div>
+</form>
 
 <script>
     function validarFormulario() {

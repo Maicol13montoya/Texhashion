@@ -1,11 +1,9 @@
 <?php
-
-
-require 'models/Ordenes.php';
-require 'models/Usuario.php';
-require 'models/Materia_prima.php';
-require 'models/Estado.php';
-require 'models/ProductosTerminados.php';
+require_once 'models/Ordenes.php';
+require_once 'models/Usuario.php';
+require_once 'models/Materia_prima.php';
+require_once 'models/Estado.php';
+require_once 'models/ProductosTerminados.php';
 
 class OrdenesController
 {
@@ -23,7 +21,6 @@ class OrdenesController
             $this->estados = new Estado;
             $this->usuarios = new Usuarios;
             $this->productosTerminados = new ProductosTerminados;
-
             if (!isset($_SESSION['user'])) {
                 header('Location: ?controller=login');
             }
@@ -36,13 +33,11 @@ class OrdenesController
     {
         if (isset($_SESSION['user'])) {
             $OrdenesController = $this->model->getAll();
-
             $arrmateriasprimas = [];
             $arrEstado = [];
             $arrusuarios = [];
             $arrProductosTerminados = [];
             $arrNotificaciones = [];
-
             $fechaActual = new DateTime();
             $diasAnticipacion = 3;
             $fechaLimite = (new DateTime())->modify("+$diasAnticipacion days");
@@ -64,7 +59,6 @@ class OrdenesController
                 if ($fechaEntrega <= $fechaLimite && $fechaEntrega >= $fechaActual) {
                     $estadoNombre = $Ordenes['Estados'] ?? 'Estado desconocido';
                     $clienteNombre = $Ordenes['nombre'] ?? 'Cliente desconocido';
-
                     array_push($arrNotificaciones, [
                         'idOrden' => $Ordenes['idOrden'],
                         'titulo' => 'Entrega próxima de Orden #' . $Ordenes['idOrden'],
@@ -79,11 +73,11 @@ class OrdenesController
             }
 
             ob_start();
-            require 'views/Ordenes/list.php';
+            require_once 'views/Ordenes/list.php';
             $content = ob_get_clean();
-            require 'views/home.php';
+            require_once 'views/home.php';
         } else {
-            require 'views/login.php';
+            require_once 'views/login.php';
         }
     }
 
@@ -118,12 +112,11 @@ class OrdenesController
         $usuarios = $this->usuarios->getAll();
         $materiasPrimas = $this->materiasPrimas->getAll();
         $estados = $this->estados->getAll();
-        $productosTerminados = $this->productosTerminados->getall();
 
         ob_start();
-        require 'views/Ordenes/new.php';
+        require_once 'views/Ordenes/new.php';
         $content = ob_get_clean();
-        require 'views/home.php';
+        require_once 'views/home.php';
     }
 
     public function save()
@@ -140,7 +133,6 @@ class OrdenesController
         ];
 
         $this->model->newOrdenes($data);
-
         header('Location: ?controller=Ordenes&method=index');
     }
 
@@ -149,17 +141,15 @@ class OrdenesController
         if (isset($_REQUEST['idOrden'])) {
             $idOrden = $_REQUEST['idOrden'];
             $data = $this->model->getOrdenById($idOrden);
-
             $usuarios = $this->usuarios->getAll();
             $productosTerminados = $this->productosTerminados->getAll();
             $materiasPrimas = $this->materiasPrimas->getAll();
             $estados = $this->estados->getAll();
-            $productosTerminados = $this->productosTerminados->getALL();
 
             ob_start();
-            require 'views/Ordenes/edit.php';
+            require_once 'views/Ordenes/edit.php';
             $content = ob_get_clean();
-            require 'views/home.php';
+            require_once 'views/home.php';
         } else {
             echo "Error: 'idOrden' no está definido.";
         }
@@ -181,7 +171,6 @@ class OrdenesController
             ];
 
             $resOrden = $this->model->editOrdenes($dataOrden);
-
             header('Location: ?controller=Ordenes&method=index');
         }
     }
@@ -190,9 +179,7 @@ class OrdenesController
     {
         if (isset($_REQUEST['idOrden'])) {
             $idOrden = $_REQUEST['idOrden'];
-
             $result = $this->model->deleteOrdenes($idOrden);
-
             if ($result === true) {
                 header('Location: ?controller=Ordenes&method=index');
                 exit();

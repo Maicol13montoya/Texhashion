@@ -4369,10 +4369,11 @@ fieldset:disabled .btn {
     color: var(--bs-nav-tabs-link-active-color)
 }
 
-.nav-tabs .dropdown-menu {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    margin-top: calc(var(--bs-nav-tabs-border-width)*-1)
+.nav-tabs .nav-link {
+    border: var(--bs-nav-tabs-border-width) solid transparent;
+    border-top-left-radius: var(--bs-nav-tabs-border-radius);
+    border-top-right-radius: var(--bs-nav-tabs-border-radius);
+    margin-bottom: calc(var(--bs-nav-tabs-border-width) * -1);
 }
 
 .nav-pills {

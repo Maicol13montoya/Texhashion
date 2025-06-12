@@ -257,11 +257,11 @@
                                 </div>
                                 <div class="product">
                                     <a>
-                                        <figure>
-                                        <img src="./assets/img/profeteacher.png" alt="Imagen1"  
-                                        class="img-responsive animated-img"/> 
-                                        </figure>
-                                    </a>
+  <figure>
+    <img src="./assets/img/profeteacher.png" alt="Profesor" class="img-responsive animated-img" />
+  </figure>
+</a>
+
                                 </div>
                                 <div class="product">
                                    <a>

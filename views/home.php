@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-include('layouts/head.php')
+include_once('layouts/head.php');
 ?>
 <script>
     var height = window.innerHeight - 2;
     var porh = (height * 74 / 100);
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#info').css('height', porh);
     });
 </script>
-
 <body>
     <div class="wrapper">
         <?php
-        include('layouts/sidebar.php')
+        include_once('layouts/sidebar.php');
         ?>
         <div class="main">
             <?php
-            include('layouts/nadvar.php')
+            include_once('layouts/nadvar.php');
             ?>
             <main class="content">
                 <div class="container-fluid p-0">
@@ -26,31 +25,27 @@ include('layouts/head.php')
                     if (isset($content) && !empty($content)) {
                         echo $content;
                     } else {
-                        include('inicio.php');
+                        include_once('inicio.php');
                     }
                     ?>
                 </div>
             </main>
-
             <?php
-            include('layouts/footer.php')
+            include_once('layouts/footer.php');
             ?>
         </div>
     </div>
-
     <script>
         let btnDisabled = document.getElementsByClassName('btnDisabled');
-
         for (let i = 0; i < btnDisabled.length; i++) {
-            btnDisabled[i].addEventListener('click', function() {
+            btnDisabled[i].addEventListener('click', function () {
                 Swal.fire(
                     'No disponible',
-                    'Intenta mas tarde',
+                    'Intenta más tarde',
                     'info'
                 );
             });
         }
     </script>
 </body>
-
 </html>

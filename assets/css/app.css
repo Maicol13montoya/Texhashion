@@ -726,15 +726,16 @@ progress {
     --bs-breakpoint-xxl: 1440px
 }
 
-.row {
+.fila {
     --bs-gutter-x: 24px;
     --bs-gutter-y: 0;
     display: flex;
     flex-wrap: wrap;
-    margin-left: calc(var(--bs-gutter-x)*-.5);
-    margin-right: calc(var(--bs-gutter-x)*-.5);
-    margin-top: calc(var(--bs-gutter-y)*-1)
+    margin-left: calc(var(--bs-gutter-x) * -0.5);
+    margin-right: calc(var(--bs-gutter-x) * -0.5);
+    margin-top: calc(var(--bs-gutter-y) * -1);
 }
+
 
 .row>* {
     flex-shrink: 0;

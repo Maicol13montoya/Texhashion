@@ -289,9 +289,9 @@
                                 <div class="product">
                                     <a>
                                         <figure>
-                                        <img src="./assets/img/prom.png" alt="Imagen1"  
-                                        class="img-responsive animated-img"/>   
-                                        </figure>
+  <img src="./assets/img/prom.png" alt="Promoción" class="img-responsive animated-img" />
+</figure>
+
                                     </a>
                                 </div>
                             </div>

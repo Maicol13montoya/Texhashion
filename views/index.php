@@ -69,7 +69,7 @@
 
 
 
-    <center>
+
         <!-- Contenedor del carrusel -->
         <div class="carousel">
             <!-- Contenedor de las imágenes -->

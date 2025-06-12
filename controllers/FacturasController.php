@@ -1,12 +1,13 @@
 <?php
-require_once 'models/Facturas.php';
-require_once 'models/Usuario.php';
-require_once 'models/Estado.php';
-require_once 'models/ProductosTerminados.php';
+
+use Modelos\Facturas;
+use Modelos\Usuario;
+use Modelos\Estado;
+use Modelos\ProductosTerminados;
 
 class FacturasController
 {
-    private $model;
+    private $modelo;
     private $usuarios;
     private $estados;
     private $productosTerminados;
@@ -14,12 +15,14 @@ class FacturasController
     public function __construct()
     {
         try {
-            $this->model = new Factura();
-            $this->usuarios = new Usuarios();
+            $this->modelo = new Facturas();
+            $this->usuarios = new Usuario();
             $this->estados = new Estado();
             $this->productosTerminados = new ProductosTerminados();
-            if (!isset($_SESSION['user'])) {
+
+            if (!isset($_SESSION['usuario'])) {
                 header('Location: ?controller=login');
+                exit;
             }
         } catch (Exception $e) {
             die($e->getMessage());
@@ -28,29 +31,29 @@ class FacturasController
 
     public function index()
     {
-        if (isset($_SESSION['user'])) {
-            $FacturasController = $this->model->getAll();
+        if (isset($_SESSION['usuario'])) {
+            $facturas = $this->modelo->obtenerTodo();
             $arrEstado = [];
-            $arrusuario = [];
-            $arrProductosTerminado = [];
+            $arrUsuario = [];
+            $arrProductosTerminados = [];
 
-            foreach ($FacturasController as $Factura) {
-                $estados = $this->model->getEstados($Factura->idFacturas);
+            foreach ($facturas as $factura) {
+                $estados = $this->modelo->obtenerEstados($factura->idFacturas);
                 array_push($arrEstado, $estados);
             }
 
-            foreach ($FacturasController as $Factura) {
-                $usuarios = $this->model->getUsuariosPTAll($Factura->idFacturas);
-                array_push($arrusuario, $usuarios);
+            foreach ($facturas as $factura) {
+                $usuarios = $this->modelo->getUsuariosPTAll($factura->idFacturas);
+                array_push($arrUsuario, $usuarios);
             }
 
-            foreach ($FacturasController as $Factura) {
-                $ProductoTerminado = $this->model->getProductosT($Factura->idFacturas);
-                array_push($arrProductosTerminado, $ProductoTerminado);
+            foreach ($facturas as $factura) {
+                $productos = $this->modelo->obtenerProductosT($factura->idFacturas);
+                array_push($arrProductosTerminados, $productos);
             }
 
             ob_start();
-            require_once 'vistas/Factura/lista.php'; // Vista para listar facturas
+            require_once 'vistas/Factura/lista.php';
             $contenido = ob_get_clean();
             require_once 'vistas/inicio.php';
         } else {
@@ -58,52 +61,42 @@ class FacturasController
         }
     }
 
-    public function add()
+    public function agregar()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $Cantidad = $_POST['Cantidad'];
-            $Informacion_del_Producto = $_POST['Informacion_del_Producto'];
-            $Fecha_de_Emision = $_POST['Fecha_de_Emision'];
-            $Precio_Total = $_POST['Precio_Total'];
-            $Numero_Factura = $_POST['Numero_Factura'];
-            $idCliente = $_POST['idCliente'];
-            $Direccion_Facturacion = $_POST['Direccion_Facturacion'];
-            $Estado_Factura = $_POST['Estado_Factura'];
-            $Fecha_Pago = $_POST['Fecha_Pago'];
-            $Referencia_Pago = $_POST['Referencia_Pago'];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->modelo->nuevaFactura([
+                'Cantidad' => $_POST['Cantidad'],
+                'Informacion_Producto' => $_POST['Informacion_Producto'],
+                'Fecha_de_Emision' => $_POST['Fecha_de_Emision'],
+                'Precio_Total' => $_POST['Precio_Total'],
+                'Numero_Factura' => $_POST['Numero_Factura'],
+                'idCliente' => $_POST['idCliente'],
+                'Direccion_Facturacion' => $_POST['Direccion_Facturacion'],
+                'Estado_Factura' => $_POST['Estado_Factura'],
+                'Fecha_Pago' => $_POST['Fecha_Pago'],
+                'Referencia_Pago' => $_POST['Referencia_Pago'],
+            ]);
 
-            $this->model->newFactura(
-                $Cantidad,
-                $Informacion_del_Producto,
-                $Fecha_de_Emision,
-                $Precio_Total,
-                $Numero_Factura,
-                $idCliente,
-                $Direccion_Facturacion,
-                $Estado_Factura,
-                $Fecha_Pago,
-                $Referencia_Pago
-            );
             header('Location: ?controller=Facturas&method=index');
-            exit();
+            exit;
         }
 
-        $clientes = $this->model->getUsuariosPTAll();
-        $estados = $this->estados->getAll();
-        $productosTerminados = $this->productosTerminados->getAll();
+        $clientes = $this->usuarios->getUsuariosPTAll();
+        $estados = $this->estados->obtenerTodo();
+        $productosTerminados = $this->productosTerminados->obtenerTodo();
 
         ob_start();
-        require_once 'views/Factura/new.php'; // Vista para agregar factura
-        $content = ob_get_clean();
-        require_once 'views/home.php';
+        require_once 'vistas/Factura/nuevo.php';
+        $contenido = ob_get_clean();
+        require_once 'vistas/inicio.php';
     }
 
-    public function save()
+    public function guardar()
     {
-        $data = [
+        $datos = [
             'idFacturas' => $_POST['idFacturas'],
             'Cantidad' => $_POST['Cantidad'],
-            'Informacion_del_Producto' => $_POST['Informacion_del_Producto'],
+            'Informacion_Producto' => $_POST['Informacion_Producto'],
             'Fecha_de_Emision' => $_POST['Fecha_de_Emision'],
             'Precio_Total' => $_POST['Precio_Total'],
             'Numero_Factura' => $_POST['Numero_Factura'],
@@ -113,35 +106,37 @@ class FacturasController
             'Fecha_Pago' => $_POST['Fecha_Pago'],
             'Referencia_Pago' => $_POST['Referencia_Pago'],
         ];
-        $this->model->newFactura($data);
+
+        $this->modelo->nuevaFactura($datos);
         header('Location: ?controller=Facturas&method=index');
+        exit;
     }
 
-    public function edit()
+    public function editar()
     {
         if (isset($_REQUEST['idFacturas'])) {
             $idFacturas = $_REQUEST['idFacturas'];
-            $data = $this->model->getFacturasId($idFacturas);
-            $usuarios = $this->model->getUsuariosPTAll();
-            $estados = $this->model->getEstados($idFacturas);
-            $productosTerminados = $this->model->getProductosT($idFacturas);
+            $datos = $this->modelo->getFacturasId($idFacturas);
+            $usuarios = $this->usuarios->getUsuariosPTAll();
+            $estados = $this->modelo->obtenerEstados($idFacturas);
+            $productosTerminados = $this->modelo->obtenerProductosT($idFacturas);
 
             ob_start();
-            require_once 'views/Factura/edit.php'; // Vista para editar factura
-            $content = ob_get_clean();
-            require_once 'views/home.php';
+            require_once 'vistas/Factura/editar.php';
+            $contenido = ob_get_clean();
+            require_once 'vistas/inicio.php';
         } else {
             echo "Error: 'idFacturas' no está definido.";
         }
     }
 
-    public function update()
+    public function actualizar()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data = [
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $datos = [
                 'idFacturas' => $_POST['idFacturas'],
                 'Cantidad' => $_POST['Cantidad'],
-                'Informacion_del_Producto' => $_POST['Informacion_del_Producto'],
+                'Informacion_Producto' => $_POST['Informacion_Producto'],
                 'Fecha_de_Emision' => $_POST['Fecha_de_Emision'],
                 'Precio_Total' => $_POST['Precio_Total'],
                 'Numero_Factura' => $_POST['Numero_Factura'],
@@ -151,25 +146,27 @@ class FacturasController
                 'Fecha_Pago' => $_POST['Fecha_Pago'],
                 'Referencia_Pago' => $_POST['Referencia_Pago'],
             ];
-            $this->model->editFactura($data);
+
+            $this->modelo->editarFactura($datos);
             header('Location: ?controller=Facturas&method=index');
-            exit();
+            exit;
         }
     }
 
-    public function deleteOut()
+    public function eliminarOut()
     {
         if (isset($_REQUEST['idFacturas'])) {
-            $idProducto = $_REQUEST['idFacturas'];
-            $result = $this->model->deleteFacturas($idProducto);
+            $idFacturas = $_REQUEST['idFacturas'];
+            $result = $this->modelo->eliminarFacturas($idFacturas);
+
             if ($result === true) {
                 header('Location: ?controller=Facturas&method=index');
-                exit();
+                exit;
             } else {
-                echo "Error al eliminar la materia prima: " . $result;
+                echo "Error al eliminar la factura: " . $result;
             }
         } else {
-            echo "Error: 'idProducto' no está definido.";
+            echo "Error: 'idFacturas' no está definido.";
         }
     }
 }

@@ -6,10 +6,12 @@
                     <div class="col">
                         <div class="row-reverse">
                             <div class="col d-flex justify-content-center">
-                                <label class="h2 font-weight-bold text-center"><img src="assets/img/TexFashion.png"
-                                        class="w-55" style="width: 25%">
+                         <label class="h2 font-weight-bold text-center">
+  <img src="assets/img/TexFashion.png" alt="TexFashion logo" class="w-55" style="width: 25%">
+</label>
+
                                     <h2 class="pt-4">Bienvenido a Texfashion</h2>
-                                </label>
+                                
                             </div>
                         </div>
                     </div>

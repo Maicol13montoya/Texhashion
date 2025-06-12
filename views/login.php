@@ -146,7 +146,9 @@
     <main class="container">
         <!-- Tarjeta de login -->
         <section class="card">
-            <img src="assets/img/TexFashion.png" alt="Imagen de Bienvenida" class="image-header">
+          <img src="assets/img/TexFashion.png" alt="Bienvenida" class="image-header">
+
+
             <div class="card-body">
                 <form action="?controller=login&method=login" method="post">
 
@@ -161,7 +163,6 @@
 
                         </div>
                     <?php } ?>
-
                     <div class="form-group input-group">
                         <span class="input-group-text">
                             <i class="fas fa-envelope"></i>

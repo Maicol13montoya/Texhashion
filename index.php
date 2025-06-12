@@ -18,26 +18,19 @@ $allowedControllers = [
     'HomeController'
 ];
 
-// Obtener controlador y método desde la URL
-$controllerName = isset($_REQUEST['controller']) 
-    ? ucfirst($_REQUEST['controller']) . 'Controller' 
-    : $defaultController;
+// Obtener controlador desde la URL o usar el predeterminado
+$controllerParam = isset($_REQUEST['controller']) ? $_REQUEST['controller'] : '';
+$controllerName = ucfirst($controllerParam) . 'Controller';
+$controllerName = in_array($controllerName, $allowedControllers) ? $controllerName : $defaultController;
 
-$method = isset($_REQUEST['method']) 
-    ? $_REQUEST['method'] 
-    : $defaultMethod;
+// Obtener método desde la URL o usar el predeterminado
+$method = isset($_REQUEST['method']) ? $_REQUEST['method'] : $defaultMethod;
 
-// Validación del controlador
-if (!in_array($controllerName, $allowedControllers)) {
-    die("Error: controlador no válido.");
-}
-
-// Verificar existencia del archivo antes de incluirlo
+// Verificar si el archivo del controlador existe
 $controllerFile = "controllers/" . $controllerName . ".php";
 if (!file_exists($controllerFile)) {
     die("Error: archivo del controlador no encontrado.");
 }
-
 require_once $controllerFile;
 
 // Crear instancia del controlador
@@ -45,8 +38,8 @@ $controller = new $controllerName();
 
 // Verificar si el método existe en el controlador
 if (!method_exists($controller, $method)) {
-    die("Error: método '$method' no encontrado en el controlador '$controllerName'.");
+    die("Error: método no válido en el controlador.");
 }
 
-// Ejecutar el método
+// Ejecutar el método de forma segura
 call_user_func([$controller, $method]);

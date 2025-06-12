@@ -1,9 +1,6 @@
 <?php
-
-
 class ProductosTerminados
 {
-
 	private $idProductos;
 	private $Nombre_Producto;
 	private $Descripcion;
@@ -14,7 +11,8 @@ class ProductosTerminados
 	private $status;
 	private $pdo;
 
-	function __construct()
+	// Constructor con visibilidad explícita
+	public function __construct()
 	{
 		try {
 			$this->pdo = new Database;
@@ -23,6 +21,7 @@ class ProductosTerminados
 		}
 	}
 
+	// Método para obtener todos los productos terminados
 	public function getALL()
 	{
 		try {
@@ -34,3 +33,4 @@ class ProductosTerminados
 		}
 	}
 }
+

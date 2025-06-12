@@ -1,7 +1,5 @@
 <?php
-
-require 'models/Login.php';
-
+require_once 'models/Login.php';
 /**
  * Clase Controlador Login
  */
@@ -26,7 +24,7 @@ class LoginController
             exit();
         } else {
             //si no se va al formulario
-            require 'views/login.php';
+            require_once 'views/login.php';
         }
     }
 
@@ -35,8 +33,7 @@ class LoginController
     {
         //validateUser metodo creado en el modelo del modelo llegan aqui
         $validateUser = $this->model->validateUser($_POST);
-        //si el validateuser es verdadera se dirije al home
-        // var_dump($validateUser);
+
         if (is_array($validateUser) && isset($validateUser['id']) && $validateUser['id'] > 0) {
             $_SESSION['user'] = $_POST['email'];
             $_SESSION['user_role'] = $validateUser['rol'];
@@ -47,7 +44,7 @@ class LoginController
                 'errorMessage' => $validateUser,
                 'email' => $_POST['email']
             ];
-            require 'views/login.php';
+            require_once 'views/login.php';
         }
     }
 
@@ -59,7 +56,8 @@ class LoginController
             session_destroy();
             //me  redirige a la vista iniciar sesion
             header('Location: ?controller=login');
-        } else {  //en caso de  sea falso me redirige al inicio sesion
+        } else {
+            //en caso de que sea falso me redirige al inicio sesion
             header('Location: ?controller=login');
         }
     }

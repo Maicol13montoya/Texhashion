@@ -1,6 +1,6 @@
 <?php
 
-require 'models/Index.php';
+require_once 'models/Index.php';
 
 /**
  * Clase Controlador Login

@@ -6,10 +6,11 @@
         <div class="card-body">
             <input type="hidden" id="idFacturas" name="idFacturas" value="<?php echo $data[0]->idFacturas ?>">
 
-            <div class="mb-3">
-                <label class="form-label">Cantidad</label>
-                <input type="number" class="form-control" name="Cantidad" value="<?php echo $data[0]->Cantidad ?>" required>
-            </div>
+           <div class="mb-3">
+  <label for="cantidad" class="form-label">Cantidad</label>
+  <input type="number" id="cantidad" name="cantidad" class="form-control">
+</div>
+
 
             <div class="mb-3">
                 <label class="form-label">Producto Terminado</label>

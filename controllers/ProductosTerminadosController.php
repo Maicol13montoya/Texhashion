@@ -1,7 +1,7 @@
 <?php
-require 'models/ProductoTerminado.php';
-require 'models/Materia_prima.php';
-require 'models/Estado.php';
+require_once 'models/ProductoTerminado.php';
+require_once 'models/Materia_prima.php';
+require_once 'models/Estado.php';
 
 class ProductosTerminadosController
 {
@@ -15,7 +15,6 @@ class ProductosTerminadosController
             $this->model = new ProductosTerminados;
             $this->materiaPrima = new MateriaPrima;
             $this->estados = new Estado;
-
             if (!isset($_SESSION['user'])) {
                 header('Location: ?controller=login');
             }
@@ -32,10 +31,9 @@ class ProductosTerminadosController
             $arrEstado = [];
 
             foreach ($productosTerminados as $producto) {
-                $materiaPrima = $this->model->getMateriasPrimas(); // Corregido: no debe pasar el idProducto
+                $materiaPrima = $this->model->getMateriasPrimas(); // No pasa id
                 array_push($arrMateriaPrima, $materiaPrima);
-
-                $estado = $this->model->getEstados(); // Corregido: no debe pasar el idEstado
+                $estado = $this->model->getEstados(); // No pasa id
                 array_push($arrEstado, $estado);
             }
 
@@ -51,36 +49,23 @@ class ProductosTerminadosController
     public function addProductoTerminado()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            $Nombre_Producto = $_POST['Nombre_Producto'];
-            $Cantidad_Disponible = $_POST['Cantidad_Disponible'];
-            $DescripcionPT = $_POST['DescripcionPT'];
-            $Fecha_Entrada = $_POST['Fecha_Entrada'];
-            $Fecha_Salida = $_POST['Fecha_Salida'];
-            $idmateria_prima = $_POST['idmateria_prima'];
-            $Estado = $_POST['Estado'];
-
-            // Pasar los datos como un array asociativo
             $data = [
-                'Nombre_Producto' => $Nombre_Producto,
-                'Cantidad_Disponible' => $Cantidad_Disponible,
-                'DescripcionPT' => $DescripcionPT,
-                'Fecha_Entrada' => $Fecha_Entrada,
-                'Fecha_Salida' => $Fecha_Salida,
-                'idmateria_prima' => $idmateria_prima,
-                'idEstado' => $Estado
+                'Nombre_Producto' => $_POST['Nombre_Producto'],
+                'Cantidad_Disponible' => $_POST['Cantidad_Disponible'],
+                'DescripcionPT' => $_POST['DescripcionPT'],
+                'Fecha_Entrada' => $_POST['Fecha_Entrada'],
+                'Fecha_Salida' => $_POST['Fecha_Salida'],
+                'idmateria_prima' => $_POST['idmateria_prima'],
+                'idEstado' => $_POST['Estado']
             ];
 
-            // Llamar al modelo para agregar el nuevo producto
             $this->model->newProductoTerminado($data);
-
             header('Location: ?controller=ProductosTerminados&method=index');
             exit();
         }
 
         $materiaPrima = $this->materiaPrima->getAll();
         $estados = $this->estados->getAll();
-
         ob_start();
         require 'views/Produtos_Terminados/new.php';
         $content = ob_get_clean();
@@ -90,7 +75,6 @@ class ProductosTerminadosController
     public function saveProductoTerminado()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Filtrar los datos que vienen del formulario
             $data = [
                 'Nombre_Producto' => $_POST['Nombre_Producto'],
                 'Cantidad_Disponible' => $_POST['Cantidad_Disponible'],
@@ -100,9 +84,7 @@ class ProductosTerminadosController
                 'idmateria_prima' => $_POST['idmateria_prima'],
                 'idEstado' => $_POST['idEstado']
             ];
-
             try {
-                // Llamar al modelo para realizar la inserción
                 $this->model->newProductoTerminado($data);
                 header('Location: ?controller=ProductosTerminados&method=index');
                 exit();
@@ -117,10 +99,8 @@ class ProductosTerminadosController
         if (isset($_REQUEST['idProductos'])) {
             $idProductos = $_REQUEST['idProductos'];
             $data = $this->model->getProductoTerminadoId($idProductos);
-
             $materiaPrima = $this->materiaPrima->getAll();
             $estados = $this->estados->getAll();
-
             ob_start();
             require 'views/Produtos_Terminados/edit.php';
             $content = ob_get_clean();
@@ -143,11 +123,9 @@ class ProductosTerminadosController
                 'idmateria_prima' => $_POST['idmateria_prima'],
                 'idEstado' => $_POST['idEstado']
             ];
-
             $this->model->editProductoTerminado($data);
             header('Location: ?controller=ProductosTerminados&method=index');
             exit();
-         
         }
     }
 

@@ -272,12 +272,12 @@
                                     </a>
                                 </div>
                                 <div class="product">
-                                    <a>
-                                        <figure>
-                                        <img src="./assets/img/posillos.png" alt="Imagen1"  
-                                        class="img-responsive animated-img"/> 
-                                        </figure>
-                                    </a>
+                                   <a>
+  <figure>
+    <img src="./assets/img/posillos.png" alt="Posillos" class="img-responsive animated-img" />
+  </figure>
+</a>
+
                                 </div>
                                 <div class="product">
                                    <a>

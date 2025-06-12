@@ -12,44 +12,45 @@
 </div>
 
 
-            <div class="mb-3">
-                <label class="form-label">Producto Terminado</label>
-                <select name="Informacion_del_Producto" class="form-control" required>
-                    <option value="">Seleccione...</option>
-                    <?php foreach ($productosTerminados as $producto) {
-                        if ($producto->idProductos == $data[0]->idProductosTerminados) {
-                    ?>
-                            <option selected value="<?php echo $producto->idProductos ?>"><?php echo $producto->Nombre_Producto ?></option>
-                        <?php } else {   ?>
-                            <option value="<?php echo $producto->idProductos ?>"><?php echo $producto->Nombre_Producto ?></option>
-                    <?php   }
-                    } ?>
-                </select>
-            </div>
+<div class="mb-3">
+    <label for="Informacion_del_Producto" class="form-label">Producto Terminado</label>
+    <select name="Informacion_del_Producto" id="Informacion_del_Producto" class="form-control" required>
+        <option value="">Selección...</option>
+        <?php foreach ($productosTerminados as $producto) {
+            if ($producto->idProductos == $datos[0]->idProductosTerminados) { ?>
+                <option value="<?php echo $producto->idProductos; ?>" selected><?php echo $producto->Nombre_Producto; ?></option>
+            <?php } else { ?>
+                <option value="<?php echo $producto->idProductos; ?>"><?php echo $producto->Nombre_Producto; ?></option>
+            <?php }
+        } ?>
+    </select>
+</div>
 
-            <div class="mb-3">
-                <label class="form-label">Fecha Emision</label>
-                <input type="date" class="form-control" name="Fecha_de_Emision" value="<?php echo $data[0]->Fecha_de_Emision ?>" required>
-            </div>
 
-            <div class="mb-3">
-                <label class="form-label">Precio Total</label>
-                <input type="number" class="form-control" name="Precio_Total" value="<?php echo $data[0]->Precio_Total ?>" required>
-            </div>
+           <div class="mb-3">
+    <label for="Fecha_de_Emision" class="form-label">Fecha de emisión</label>
+    <input type="date" id="Fecha_de_Emision" class="form-control" name="Fecha_de_Emision" value="<?php echo $datos[0]->Fecha_de_Emision; ?>" required>
+</div>
 
-            <div class="mb-3">
-                <label class="form-label">Numero Factura</label>
-                <input type=" number" class="form-control" name="Numero_Factura" id="numeroFactura" value="<?php echo $data[0]->Numero_Factura ?>" required>
-            </div>
 
-            <div class="mb-3">
-                <label class="form-label">Lugar De Facturación</label>
-                <select name="Direccion_Facturacion" class="form-control" required>
-                    <option value="">Seleccione...</option>
-                    <option value="Carrera 7c #90" <?php echo $data[0]->Direccion_Facturacion == 'Carrera 7c #90' ? 'selected' : '' ?>>Carrera 7c #90</option>
-                </select>
-            </div>
+        <div class="mb-3">
+    <label for="Precio_Total" class="form-label">Precio total</label>
+    <input type="number" id="Precio_Total" class="form-control" name="Precio_Total" value="<?php echo $datos[0]->Precio_Total; ?>" required>
+</div>
 
+
+          <div class="mb-3">
+    <label for="numeroFactura" class="form-label">Número Factura</label>
+    <input type="number" class="form-control" name="Numero_Factura" id="numeroFactura" value="<?php echo $datos[0]->Numero_Factura; ?>" required>
+</div>
+
+           <div class="mb-3">
+    <label for="Direccion_Facturacion" class="form-label">Lugar De Facturación</label>
+    <select name="Direccion_Facturacion" id="Direccion_Facturacion" class="form-control" required>
+        <option value="">Selección...</option>
+        <option value="Carrera 7c #90" <?php echo $datos[0]->Direccion_Facturacion == 'Carrera 7c #90' ? 'selected' : ''; ?>>Carrera 7c #90</option>
+    </select>
+</div>
             <div class="mb-3">
                 <label class="form-label">Cliente</label>
                 <select name="idCliente" class="form-control" required>
@@ -69,33 +70,31 @@
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Estado</label>
-                <select name="Estado_Factura" class="form-control" required>
-                    <option value="">Seleccione...</option>
-                    <?php foreach ($estados as $estado) {
-                        if ($estado->idEstados == $data[0]->Estado_Factura) {
-                    ?>
-                            <option selected value="<?php echo $estado->idEstados ?>"><?php echo $estado->Estados ?></option>
-                        <?php } else {
-                        ?>
-                            <option value="<?php echo $estado->idEstados ?>"><?php echo $estado->Estados ?></option>
-                    <?php
-                        }
-                    }
-                    ?>
-                </select>
-            </div>
+<div class="mb-3">
+    <label for="Estado_Factura" class="form-label">Estado</label>
+    <select name="Estado_Factura" id="Estado_Factura" class="form-control" required>
+        <option value="">Selección...</option>
+        <?php foreach ($estados as $estado) {
+            if ($estado->idEstados == $datos[0]->Estado_Factura) { ?>
+                <option value="<?php echo $estado->idEstados; ?>" selected><?php echo $estado->Estados; ?></option>
+            <?php } else { ?>
+                <option value="<?php echo $estado->idEstados; ?>"><?php echo $estado->Estados; ?></option>
+            <?php }
+        } ?>
+    </select>
+</div>
 
-            <div class="mb-3">
-                <label class="form-label">Fecha de pago</label>
-                <input type="date" class="form-control" name="Fecha_Pago" value="<?php echo $data[0]->Fecha_Pago ?>" required>
-            </div>
 
-            <div class="mb-3">
-                <label class="form-label">Referencia de factura</label>
-                <input type="text" class="form-control" name="Referencia_Pago" value="<?php echo $data[0]->Referencia_Pago ?>" required>
-            </div>
+         <div class="mb-3">
+    <label for="Fecha_Pago" class="form-label">Fecha de pago</label>
+    <input type="date" id="Fecha_Pago" class="form-control" name="Fecha_Pago" value="<?php echo $datos[0]->Fecha_Pago; ?>" required>
+</div>
+
+          <div class="mb-3">
+    <label for="Referencia_Pago" class="form-label">Referencia de factura</label>
+    <input type="text" id="Referencia_Pago" class="form-control" name="Referencia_Pago" value="<?php echo $datos[0]->Referencia_Pago; ?>" required>
+</div>
+
 
             <div class="form-group">
                 <button class="btn btn-primary" id="submit">Actualizar</button>

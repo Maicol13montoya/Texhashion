@@ -1,5 +1,4 @@
 <?php
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -10,14 +9,13 @@ class CorreoController
     public function enviarBienvenida($correo, $nombre, $contrasena)
     {
         $mail = new PHPMailer(true);
-
         try {
             // Configuración SMTP de Mailtrap
             $mail->isSMTP();
-            $mail->Host = 'sandbox.smtp.mailtrap.io'; // Asegúrate que sea el host correcto para tu inbox
+            $mail->Host = 'sandbox.smtp.mailtrap.io';
             $mail->SMTPAuth = true;
-            $mail->Username = '98e6f0e213e171'; // Reemplaza por tu usuario de Mailtrap
-            $mail->Password = '095580fb623569'; // Reemplaza por tu contraseña de Mailtrap
+            $mail->Username = '98e6f0e213e171'; // Usuario de Mailtrap
+            $mail->Password = '095580fb623569'; // Contraseña de Mailtrap
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 

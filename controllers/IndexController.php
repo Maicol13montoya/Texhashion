@@ -1,5 +1,4 @@
 <?php
-
 require_once 'models/Index.php';
 
 /**
@@ -17,9 +16,8 @@ class IndexController
 		$this->model = new Index;
 	}
 
-
 	public function index()
 	{
-		require 'views/index.php';
+		require_once 'views/index.php';
 	}
 }

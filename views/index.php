@@ -280,11 +280,12 @@
                                     </a>
                                 </div>
                                 <div class="product">
-                                    <a>
-                                        <figure>
-                                        <img src="./assets/img/clavijo.png" alt="Imagen1"  
-                                        class="img-responsive animated-img"/>   
-                                    </a>
+                                   <a>
+  <figure>
+    <img src="./assets/img/clavijo.png" alt="Clavijo" class="img-responsive animated-img" />
+  </figure>
+</a>
+
                                 </div>
                                 <div class="product">
                                     <a>

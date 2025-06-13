@@ -14,14 +14,13 @@ class HomeController
         }
     }
 
-    public function index()
-    {
-        // Cargar la vista del home
-        try {
-            require_once 'vistas/inicio.php';
-        } catch (Exception $e) {
-            error_log("Error al cargar vistas: " . $e->getMessage()); // Registro de error
-            echo "Error al cargar la vista."; // Mensaje de error simple
-        }
+  public function index()
+{
+    // Cargar la vista de inicio
+    try {
+        require_once 'vistas/inicio.php';
+    } catch (\Exception $e) {
+        error_log("Error al cargar la vista: " . $e->getMessage()); // Registrar error en el log del servidor
+        echo "Error al cargar la vista."; // Mensaje simple para el usuario
     }
 }

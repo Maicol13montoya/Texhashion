@@ -1,27 +1,24 @@
-<?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require_once 'vendor/autoload.php';  // Carga automática de clases de Composer
-require_once 'config_mail.php';      // Carga configuración SMTP personalizada
-
-class CorreoController
+class TuControlador
 {
     public function enviarBienvenida($correo, $nombre, $contrasena)
     {
         // Obtener configuración SMTP
-        $config = require 'config_mail.php';  // No es necesario "require_once" porque no se trata de definir clases o funciones múltiples veces
+        require_once 'config_mail.php'; // Usamos require_once para evitar inclusión múltiple
 
         $mail = new PHPMailer(true);
+
         try {
             // Configuración del servidor SMTP
             $mail->isSMTP();
-            $mail->Host = $config['host'];
-            $mail->SMTPAuth = true;
-            $mail->Username = $config['username'];
-            $mail->Password = $config['password'];
+            $mail->Host       = $config['host'];
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $config['username'];
+            $mail->Password   = $config['password'];
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = $config['port'];
+            $mail->Port       = $config['port'];
 
             // Dirección del remitente y del destinatario
             $mail->setFrom($config['from_email'], $config['from_name']);
@@ -44,10 +41,13 @@ class CorreoController
 
             $mail->send();
             return true;
+
         } catch (Exception $e) {
             error_log("Error al enviar correo: " . $mail->ErrorInfo);
             return false;
         }
     }
+}
+
 }
 

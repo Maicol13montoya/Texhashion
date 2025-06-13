@@ -2,17 +2,25 @@
 
 class Database extends PDO
 {
-    private string $driver = 'mysql';
-    private string $host = 'texfashio.mysql.database.azure.com';
-    private string $dbName = 'textfashion';
-    private string $charset = 'utf8mb4';
-    private string $user = 'maicol';
-    private string $password = 'root*25*';
+    private string $driver;
+    private string $host;
+    private string $dbName;
+    private string $charset;
+    private string $user;
+    private string $password;
 
     public function __construct()
     {
-        // Obtener contraseña desde variable de entorno o valor por defecto
-        $this->password = $_ENV['DB_PASSWORD'] ?? 'root*25*';
+        // Cargar configuración desde archivo externo
+        $config = require 'config_db.php';
+
+        $this->driver = $config['driver'];
+        $this->host = $config['host'];
+        $this->dbName = $config['dbname'];
+        $this->charset = $config['charset'];
+        $this->user = $config['user'];
+        $this->password = $config['password'];
+
         $dsn = "{$this->driver}:host={$this->host};dbname={$this->dbName};charset={$this->charset}";
 
         $sslOptions = defined('PDO::MYSQL_ATTR_SSL_CA') ? [
@@ -21,11 +29,11 @@ class Database extends PDO
         ] : [];
 
         $options = array_replace([
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
-            PDO::ATTR_TIMEOUT => 30,
-            PDO::ATTR_PERSISTENT => false
+            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_TIMEOUT            => 30,
+            PDO::ATTR_PERSISTENT         => false
         ], $sslOptions);
 
         try {
@@ -44,32 +52,28 @@ class Database extends PDO
     private function connectWithoutSSL(string $dsn): void
     {
         $options = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
-            PDO::ATTR_TIMEOUT => 30
+            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_TIMEOUT            => 30
         ];
 
-        try {
-            parent::__construct($dsn, $this->user, $this->password, $options);
-            error_log("✅ Conexión exitosa sin SSL.");
-        } catch (PDOException $e) {
-            throw new PDOException("Fallo al conectar sin SSL: " . $e->getMessage());
-        }
+        parent::__construct($dsn, $this->user, $this->password, $options);
+        error_log("✅ Conexión exitosa sin SSL.");
     }
 
-    public function select(string $strSql, array $arrayData = [], int $fetchMode = PDO::FETCH_ASSOC): array
+    public function select(string $sql, array $params = [], int $fetchMode = PDO::FETCH_ASSOC): array
     {
         try {
-            $query = $this->prepare($strSql);
-            foreach ($arrayData as $key => $value) {
-                $query->bindValue(":$key", $value);
+            $stmt = $this->prepare($sql);
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(":$key", $value);
             }
-            $query->execute();
-            return $query->fetchAll($fetchMode);
+            $stmt->execute();
+            return $stmt->fetchAll($fetchMode);
         } catch (PDOException $e) {
             error_log("❌ Error en SELECT: " . $e->getMessage());
-            throw new Exception("Error en consulta SELECT: " . $e->getMessage());
+            throw new Exception("Error en SELECT: " . $e->getMessage());
         }
     }
 
@@ -80,23 +84,22 @@ class Database extends PDO
                 throw new InvalidArgumentException("Tabla y datos son requeridos");
             }
 
-            $data = array_filter($data, function ($key) {
-                return !in_array($key, ['controller', 'method']);
-            }, ARRAY_FILTER_USE_KEY);
+            $data = array_filter($data, fn($key) => !in_array($key, ['controller', 'method']), ARRAY_FILTER_USE_KEY);
 
             ksort($data);
 
-            $fieldNames = implode('`, `', array_keys($data));
-            $fieldValues = ':' . implode(', :', array_keys($data));
-            $sql = "INSERT INTO `$table` (`$fieldNames`) VALUES ($fieldValues)";
+            $fields = implode('`, `', array_keys($data));
+            $placeholders = ':' . implode(', :', array_keys($data));
 
+            $sql = "INSERT INTO `$table` (`$fields`) VALUES ($placeholders)";
             $stmt = $this->prepare($sql);
+
             foreach ($data as $key => $value) {
                 $stmt->bindValue(":$key", $value);
             }
 
             $stmt->execute();
-            return (int)$this->lastInsertId();
+            return (int) $this->lastInsertId();
         } catch (PDOException $e) {
             error_log("❌ Error en INSERT: " . $e->getMessage());
             throw new Exception("Error en INSERT: " . $e->getMessage());
@@ -111,14 +114,11 @@ class Database extends PDO
             }
 
             ksort($data);
-            $fieldDetails = '';
-            foreach ($data as $key => $value) {
-                $fieldDetails .= "`$key` = :$key,";
-            }
-            $fieldDetails = rtrim($fieldDetails, ',');
+            $setClause = implode(', ', array_map(fn($k) => "`$k` = :$k", array_keys($data)));
 
-            $sql = "UPDATE `$table` SET $fieldDetails WHERE $where";
+            $sql = "UPDATE `$table` SET $setClause WHERE $where";
             $stmt = $this->prepare($sql);
+
             foreach ($data as $key => $value) {
                 $stmt->bindValue(":$key", $value);
             }
@@ -168,15 +168,3 @@ class Database extends PDO
         }
     }
 }
-
-// --- PRUEBA DE CONEXIÓN ---
-// try {
-//     $db = new Database();
-//     if ($db->isConnected()) {
-//         echo "✅ Conexión exitosa a la base de datos.";
-//     } else {
-//         echo "❌ Conexión fallida.";
-//     }
-// } catch (Exception $e) {
-//     echo "❌ Error: " . $e->getMessage();
-// }

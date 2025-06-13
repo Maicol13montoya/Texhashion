@@ -5,7 +5,7 @@
     <div class="card-body">
         <form action="?controller=Usuarios&method=update" method="post" onsubmit="return validarFormulario()">
             <input type="hidden" id="id" name="id" value="<?php echo $data[0]->id ?>">
-            
+
             <div class="col mb-4">
                 <div class="row">
                     <div class="col">
@@ -26,8 +26,7 @@
                         <select name="tipo_doc" id="tipo_doc" class="form-control" required>
                             <option value="">Seleccione...</option>
                             <?php foreach ($tipos_doc as $tipo_doc): ?>
-                                <option value="<?php echo $tipo_doc->IdDocumento ?>" 
-                                    <?php echo ($tipo_doc->IdDocumento == $data[0]->tipo_documento) ? 'selected' : ''; ?>>
+                                <option value="<?php echo $tipo_doc->IdDocumento ?>" <?php echo ($tipo_doc->IdDocumento == $data[0]->tipo_documento) ? 'selected' : ''; ?>>
                                     <?php echo $tipo_doc->TipoDocumento ?>
                                 </option>
                             <?php endforeach; ?>
@@ -73,8 +72,7 @@
                         <select name="rol" id="rol" class="form-control" required>
                             <option value="">Seleccione...</option>
                             <?php foreach ($roles as $rol): ?>
-                                <option value="<?php echo $rol->idRol ?>" 
-                                    <?php echo ($rol->idRol == $data[0]->rol) ? 'selected' : ''; ?>>
+                                <option value="<?php echo $rol->idRol ?>" <?php echo ($rol->idRol == $data[0]->rol) ? 'selected' : ''; ?>>
                                     <?php echo $rol->Rol ?>
                                 </option>
                             <?php endforeach; ?>
@@ -110,7 +108,6 @@
             alert("El nombre solo debe contener letras.");
             return false;
         }
-
         if (!nombreRegex.test(apellido)) {
             alert("El apellido solo debe contener letras.");
             return false;

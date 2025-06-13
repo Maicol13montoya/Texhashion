@@ -2,19 +2,20 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require_once 'vendor/autoload.php'; // Carga PHPMailer
-require_once 'config_mail.php';     // Carga configuración SMTP
+require_once 'vendor/autoload.php';     // Carga PHPMailer
+require_once 'config_mail.php';         // Carga configuración SMTP solo una vez
 
 class CorreoController
 {
     public function enviarBienvenida($correo, $nombre, $contrasena)
     {
-        // Cargar configuración SMTP desde el archivo
-        $config = require 'config_mail.php';
+        // Cargar configuración SMTP desde el archivo externo
+        $config = require_once 'config_mail.php';
+
         $mail = new PHPMailer(true);
 
         try {
-            // Configuración SMTP de Mailtrap
+            // Configuración SMTP
             $mail->isSMTP();
             $mail->Host = $config['host'];
             $mail->SMTPAuth = true;

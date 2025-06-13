@@ -1,4 +1,5 @@
 <?php
+namespace Controladores;
 
 use Modelos\Facturas;
 use Modelos\Usuario;
@@ -24,7 +25,7 @@ class FacturasController
                 header('Location: ?controller=login');
                 exit;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             die($e->getMessage());
         }
     }
@@ -52,9 +53,7 @@ class FacturasController
                 array_push($arrProductosTerminados, $productos);
             }
 
-            ob_start();
             require_once 'vistas/Factura/lista.php';
-            $contenido = ob_get_clean();
             require_once 'vistas/inicio.php';
         } else {
             require_once 'vistas/login.php';
@@ -67,7 +66,7 @@ class FacturasController
             $this->modelo->nuevaFactura([
                 'Cantidad' => $_POST['Cantidad'],
                 'Informacion_Producto' => $_POST['Informacion_Producto'],
-                'Fecha_de_Emision' => $_POST['Fecha_de_Emision'],
+                'Fecha_Emision' => $_POST['Fecha_Emision'],
                 'Precio_Total' => $_POST['Precio_Total'],
                 'Numero_Factura' => $_POST['Numero_Factura'],
                 'idCliente' => $_POST['idCliente'],
@@ -81,23 +80,17 @@ class FacturasController
             exit;
         }
 
-        $clientes = $this->usuarios->getUsuariosPTAll();
-        $estados = $this->estados->obtenerTodo();
-        $productosTerminados = $this->productosTerminados->obtenerTodo();
-
-        ob_start();
         require_once 'vistas/Factura/nuevo.php';
-        $contenido = ob_get_clean();
         require_once 'vistas/inicio.php';
     }
 
     public function guardar()
     {
-        $datos = [
+        $this->modelo->nuevaFactura([
             'idFacturas' => $_POST['idFacturas'],
             'Cantidad' => $_POST['Cantidad'],
             'Informacion_Producto' => $_POST['Informacion_Producto'],
-            'Fecha_de_Emision' => $_POST['Fecha_de_Emision'],
+            'Fecha_Emision' => $_POST['Fecha_Emision'],
             'Precio_Total' => $_POST['Precio_Total'],
             'Numero_Factura' => $_POST['Numero_Factura'],
             'idCliente' => $_POST['idCliente'],
@@ -105,9 +98,8 @@ class FacturasController
             'Estado_Factura' => $_POST['Estado_Factura'],
             'Fecha_Pago' => $_POST['Fecha_Pago'],
             'Referencia_Pago' => $_POST['Referencia_Pago'],
-        ];
+        ]);
 
-        $this->modelo->nuevaFactura($datos);
         header('Location: ?controller=Facturas&method=index');
         exit;
     }
@@ -117,13 +109,8 @@ class FacturasController
         if (isset($_REQUEST['idFacturas'])) {
             $idFacturas = $_REQUEST['idFacturas'];
             $datos = $this->modelo->getFacturasId($idFacturas);
-            $usuarios = $this->usuarios->getUsuariosPTAll();
-            $estados = $this->modelo->obtenerEstados($idFacturas);
-            $productosTerminados = $this->modelo->obtenerProductosT($idFacturas);
 
-            ob_start();
             require_once 'vistas/Factura/editar.php';
-            $contenido = ob_get_clean();
             require_once 'vistas/inicio.php';
         } else {
             echo "Error: 'idFacturas' no está definido.";
@@ -133,11 +120,11 @@ class FacturasController
     public function actualizar()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $datos = [
+            $this->modelo->editarFactura([
                 'idFacturas' => $_POST['idFacturas'],
                 'Cantidad' => $_POST['Cantidad'],
                 'Informacion_Producto' => $_POST['Informacion_Producto'],
-                'Fecha_de_Emision' => $_POST['Fecha_de_Emision'],
+                'Fecha_Emision' => $_POST['Fecha_Emision'],
                 'Precio_Total' => $_POST['Precio_Total'],
                 'Numero_Factura' => $_POST['Numero_Factura'],
                 'idCliente' => $_POST['idCliente'],
@@ -145,9 +132,8 @@ class FacturasController
                 'Estado_Factura' => $_POST['Estado_Factura'],
                 'Fecha_Pago' => $_POST['Fecha_Pago'],
                 'Referencia_Pago' => $_POST['Referencia_Pago'],
-            ];
+            ]);
 
-            $this->modelo->editarFactura($datos);
             header('Location: ?controller=Facturas&method=index');
             exit;
         }
@@ -170,4 +156,5 @@ class FacturasController
         }
     }
 }
+
 ?>

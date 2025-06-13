@@ -1,5 +1,4 @@
 <?php
-
 class Database extends PDO
 {
     private string $driver;
@@ -12,7 +11,7 @@ class Database extends PDO
     public function __construct()
     {
         // Cargar configuración desde archivo externo
-        $config = require 'config_db.php';
+        $config = require_once 'config_db.php';
 
         $this->driver = $config['driver'];
         $this->host = $config['host'];
@@ -85,15 +84,13 @@ class Database extends PDO
             }
 
             $data = array_filter($data, fn($key) => !in_array($key, ['controller', 'method']), ARRAY_FILTER_USE_KEY);
-
             ksort($data);
 
             $fields = implode('`, `', array_keys($data));
             $placeholders = ':' . implode(', :', array_keys($data));
-
             $sql = "INSERT INTO `$table` (`$fields`) VALUES ($placeholders)";
-            $stmt = $this->prepare($sql);
 
+            $stmt = $this->prepare($sql);
             foreach ($data as $key => $value) {
                 $stmt->bindValue(":$key", $value);
             }
@@ -115,10 +112,9 @@ class Database extends PDO
 
             ksort($data);
             $setClause = implode(', ', array_map(fn($k) => "`$k` = :$k", array_keys($data)));
-
             $sql = "UPDATE `$table` SET $setClause WHERE $where";
-            $stmt = $this->prepare($sql);
 
+            $stmt = $this->prepare($sql);
             foreach ($data as $key => $value) {
                 $stmt->bindValue(":$key", $value);
             }

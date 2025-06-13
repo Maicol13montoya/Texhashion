@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Inicio - TexFashion</title>
-    <?php include_once('layouts/head.php'); ?>
+    <?php include_once 'layouts/head.php'; ?>
     <script>
         var height = window.innerHeight - 2;
         var porh = (height * 74 / 100);
@@ -14,10 +14,8 @@
 <body>
     <div class="wrapper">
         <?php include_once('layouts/sidebar.php'); ?>
-
         <div class="main">
             <?php include_once('layouts/nadvar.php'); ?>
-
             <main class="content">
                 <div class="container-fluid p-0">
                     <?php
@@ -29,11 +27,9 @@
                     ?>
                 </div>
             </main>
-
             <?php include_once('layouts/footer.php'); ?>
         </div>
     </div>
-
     <script>
         let btnDisabled = document.getElementsByClassName('btnDisabled');
         for (let i = 0; i < btnDisabled.length; i++) {

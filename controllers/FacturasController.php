@@ -1,4 +1,5 @@
 <?php
+
 namespace Controladores;
 
 use Modelos\Facturas;
@@ -53,10 +54,10 @@ class FacturasController
                 array_push($arrProductosTerminados, $productos);
             }
 
-            require_once 'vistas/Factura/lista.php';
-            require_once 'vistas/inicio.php';
+            include 'vistas/Factura/lista.php';
+            include 'vistas/inicio.php';
         } else {
-            require_once 'vistas/login.php';
+            include 'vistas/login.php';
         }
     }
 
@@ -80,8 +81,8 @@ class FacturasController
             exit;
         }
 
-        require_once 'vistas/Factura/nuevo.php';
-        require_once 'vistas/inicio.php';
+        include 'vistas/Factura/nuevo.php';
+        include 'vistas/inicio.php';
     }
 
     public function guardar()
@@ -108,10 +109,9 @@ class FacturasController
     {
         if (isset($_REQUEST['idFacturas'])) {
             $idFacturas = $_REQUEST['idFacturas'];
-            $datos = $this->modelo->getFacturasId($idFacturas);
-
-            require_once 'vistas/Factura/editar.php';
-            require_once 'vistas/inicio.php';
+            // $datos = $this->modelo->getFacturasId($idFacturas); // Eliminado por ser no utilizado
+            include 'vistas/Factura/editar.php';
+            include 'vistas/inicio.php';
         } else {
             echo "Error: 'idFacturas' no está definido.";
         }
@@ -144,7 +144,6 @@ class FacturasController
         if (isset($_REQUEST['idFacturas'])) {
             $idFacturas = $_REQUEST['idFacturas'];
             $result = $this->modelo->eliminarFacturas($idFacturas);
-
             if ($result === true) {
                 header('Location: ?controller=Facturas&method=index');
                 exit;
@@ -156,5 +155,3 @@ class FacturasController
         }
     }
 }
-
-?>

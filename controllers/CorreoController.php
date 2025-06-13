@@ -2,25 +2,29 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require_once 'vendor/autoload.php'; // Carga automática del compositor para PHPMailer
+require_once 'vendor/autoload.php'; // Carga PHPMailer
+require_once 'config_mail.php';     // Carga configuración SMTP
 
 class CorreoController
 {
     public function enviarBienvenida($correo, $nombre, $contrasena)
     {
+        // Cargar configuración SMTP desde el archivo
+        $config = require 'config_mail.php';
         $mail = new PHPMailer(true);
+
         try {
             // Configuración SMTP de Mailtrap
             $mail->isSMTP();
-            $mail->Host = 'sandbox.smtp.mailtrap.io';
+            $mail->Host = $config['host'];
             $mail->SMTPAuth = true;
-            $mail->Username = '98e6f0e213e171'; // Usuario de Mailtrap
-            $mail->Password = '095580fb623569'; // Contraseña de Mailtrap
+            $mail->Username = $config['username'];
+            $mail->Password = $config['password'];
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->Port = $config['port'];
 
             // Remitente y destinatario
-            $mail->setFrom('no-responder@tusitio.com', 'TexFashion');
+            $mail->setFrom($config['from_email'], $config['from_name']);
             $mail->addAddress($correo, $nombre);
 
             // Contenido del correo

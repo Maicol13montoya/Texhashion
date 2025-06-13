@@ -2,20 +2,19 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require_once 'vendor/autoload.php';     // Carga PHPMailer
-require_once 'config_mail.php';         // Carga configuración SMTP solo una vez
+require_once 'vendor/autoload.php';  // Carga automática de clases de Composer
+require_once 'config_mail.php';      // Carga configuración SMTP personalizada
 
 class CorreoController
 {
     public function enviarBienvenida($correo, $nombre, $contrasena)
     {
-        // Cargar configuración SMTP desde el archivo externo
-        $config = require_once 'config_mail.php';
+        // Obtener configuración SMTP
+        $config = require 'config_mail.php';  // No es necesario "require_once" porque no se trata de definir clases o funciones múltiples veces
 
         $mail = new PHPMailer(true);
-
         try {
-            // Configuración SMTP
+            // Configuración del servidor SMTP
             $mail->isSMTP();
             $mail->Host = $config['host'];
             $mail->SMTPAuth = true;
@@ -24,11 +23,11 @@ class CorreoController
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = $config['port'];
 
-            // Remitente y destinatario
+            // Dirección del remitente y del destinatario
             $mail->setFrom($config['from_email'], $config['from_name']);
             $mail->addAddress($correo, $nombre);
 
-            // Contenido del correo
+            // Contenido del mensaje
             $mail->isHTML(true);
             $mail->Subject = 'Registro exitoso en TexFashion';
             $mail->Body = "
@@ -51,3 +50,4 @@ class CorreoController
         }
     }
 }
+

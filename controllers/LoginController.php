@@ -1,64 +1,71 @@
 <?php
 require_once 'models/Login.php';
+
 /**
  * Clase Controlador Login
  */
 class LoginController
 {
-    //atributo para que me conecte al modelo
+    // Atributo para conectar al modelo
     private $model;
 
-    //llamado del constructor
+    // Constructor
     public function __construct()
     {
-        //instancia
         $this->model = new Login;
     }
 
+    // Método para mostrar la vista de login o redirigir si ya hay sesión activa
     public function index()
     {
-        //variable reservada session verifica si hay un usuario en sesion y lo  redirige al home
         if (isset($_SESSION['user'])) {
-            //si existe una sesion se va al home
             header('Location: ?controller=home');
             exit();
         } else {
-            //si no se va al formulario
             require_once 'views/login.php';
         }
     }
 
-    //funcion login que  nos permite hacer el inicio de sesion
+    // Función que permite iniciar sesión
     public function login()
     {
-        //validateUser metodo creado en el modelo del modelo llegan aqui
-        $validateUser = $this->model->validateUser($_POST);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['email']) && !empty($_POST['contrasena'])) {
+            $email = trim($_POST['email']);
+            $contrasena = trim($_POST['contrasena']);
 
-        if (is_array($validateUser) && isset($validateUser['id']) && $validateUser['id'] > 0) {
-            $_SESSION['user'] = $_POST['email'];
-            $_SESSION['user_role'] = $validateUser['rol'];
-            header('Location: ?controller=home');
-            exit();
+            // Validar usuario a través del modelo
+            $usuario = $this->model->validateUser($email, $contrasena);
+
+            if (is_array($usuario) && isset($usuario['id']) && $usuario['id'] > 0) {
+                $_SESSION['user'] = $email;
+                $_SESSION['user_role'] = $usuario['rol'];
+
+                header('Location: ?controller=home');
+                exit();
+            } else {
+                // Credenciales inválidas
+                $error = [
+                    'errorMessage' => 'Correo o contraseña incorrectos.',
+                    'email' => $email
+                ];
+                require_once 'views/login.php';
+            }
         } else {
+            // Datos no enviados correctamente
             $error = [
-                'errorMessage' => $validateUser,
-                'email' => $_POST['email']
+                'errorMessage' => 'Por favor ingresa tu correo y contraseña.'
             ];
             require_once 'views/login.php';
         }
     }
 
-    //metodo  para cerrar sesion
+    // Método para cerrar sesión
     public function logout()
     {
-        //si existe una sesion destruye la sesion con el metodo destroy
-        if ($_SESSION['user']) {
+        if (isset($_SESSION['user'])) {
             session_destroy();
-            //me  redirige a la vista iniciar sesion
-            header('Location: ?controller=login');
-        } else {
-            //en caso de que sea falso me redirige al inicio sesion
-            header('Location: ?controller=login');
         }
+        header('Location: ?controller=login');
+        exit();
     }
 }
